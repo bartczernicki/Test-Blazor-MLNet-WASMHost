@@ -1,0 +1,104 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>Test_Blazor_MLNet_WASMHost.Shared</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Data\MLBBaseballBatters.csv" />
+    <None Remove="Models\InductedToHallOfFame-AveragedPerceptron.mlnet" />
+    <None Remove="Models\InductedToHallOfFame-FastForest.mlnet" />
+    <None Remove="Models\InductedToHallOfFame-FastTree.mlnet" />
+    <None Remove="Models\InductedToHallOfFame-FieldAwareFactorization.mlnet" />
+    <None Remove="Models\InductedToHallOfFame-GeneralizedAdditiveModels.mlnet" />
+    <None Remove="Models\InductedToHallOfFame-LightGbm.mlnet" />
+    <None Remove="Models\InductedToHallOfFame-LinearSupportVectorMachines.mlnet" />
+    <None Remove="Models\InductedToHallOfFame-LogisticRegression.mlnet" />
+    <None Remove="Models\InductedToHallOfFame-StochasticGradientDescentCalibrated.mlnet" />
+    <None Remove="Models\InductedToHallOfFame-StochasticGradientDescentNonCalibrated.mlnet" />
+    <None Remove="Models\OnHallOfFameBallot-AveragedPerceptron.mlnet" />
+    <None Remove="Models\OnHallOfFameBallot-FastForest.mlnet" />
+    <None Remove="Models\OnHallOfFameBallot-FastTree.mlnet" />
+    <None Remove="Models\OnHallOfFameBallot-FieldAwareFactorization.mlnet" />
+    <None Remove="Models\OnHallOfFameBallot-GeneralizedAdditiveModel.mlnet" />
+    <None Remove="Models\OnHallOfFameBallot-GeneralizedAdditiveModels.mlnet" />
+    <None Remove="Models\OnHallOfFameBallot-LightGbm.mlnet" />
+    <None Remove="Models\OnHallOfFameBallot-LogisticRegression.mlnet" />
+    <None Remove="Models\OnHallOfFameBallot-StochasticGradientDescentCalibrated.mlnet" />
+    <None Remove="Models\OnHallOfFameBallot-StochasticGradientDescentNonCalibrated.mlnet" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Data\MLBBaseballBatters.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Models\InductedToHallOfFame-AveragedPerceptron.mlnet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Models\InductedToHallOfFame-FastForest.mlnet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Models\InductedToHallOfFame-FastTree.mlnet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Models\InductedToHallOfFame-FieldAwareFactorization.mlnet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Models\InductedToHallOfFame-GeneralizedAdditiveModels.mlnet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Models\InductedToHallOfFame-LightGbm.mlnet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Models\InductedToHallOfFame-LinearSupportVectorMachines.mlnet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Models\InductedToHallOfFame-LogisticRegression.mlnet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Models\InductedToHallOfFame-StochasticGradientDescentCalibrated.mlnet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Models\InductedToHallOfFame-StochasticGradientDescentNonCalibrated.mlnet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Models\OnHallOfFameBallot-AveragedPerceptron.mlnet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Models\OnHallOfFameBallot-FastForest.mlnet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Models\OnHallOfFameBallot-FastTree.mlnet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Models\OnHallOfFameBallot-FieldAwareFactorization.mlnet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Models\OnHallOfFameBallot-GeneralizedAdditiveModel.mlnet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Models\OnHallOfFameBallot-GeneralizedAdditiveModels.mlnet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Models\OnHallOfFameBallot-LightGbm.mlnet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Models\OnHallOfFameBallot-LogisticRegression.mlnet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Models\OnHallOfFameBallot-StochasticGradientDescentCalibrated.mlnet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Models\OnHallOfFameBallot-StochasticGradientDescentNonCalibrated.mlnet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ML" Version="1.5.2" />
+    <PackageReference Include="Microsoft.ML.FastTree" Version="1.5.2" />
+    <PackageReference Include="Microsoft.ML.LightGbm" Version="1.5.2" />
+  </ItemGroup>
+
+</Project>
