@@ -90,10 +90,15 @@ td {
 
 /*https://archive.nytimes.com/www.nytimes.com/interactive/2013/03/29/sports/baseball/Strikeouts-Are-Still-Soaring.html?ref=baseball*/
 
+.g-predictionChart {
+    width: 330px;
+    margin-left: 10px;
+}
+
 .g-predictionTable {
-    width: 300px;
+    width: 330px;
     float: left;
-    margin-left: 30px;
+    margin-left: 10px;
 }
 
 .g-seasonNumber {

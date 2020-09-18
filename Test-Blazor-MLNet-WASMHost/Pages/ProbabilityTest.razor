@@ -1,5 +1,7 @@
 ﻿@page "/ProbabilityTest"
 @inject BaseballDataSampleService BaseballDataService
+@inject IJSRuntime JSRuntime
+
 
 <strong class="form-text">Local prediction inference in Blazor and ML.NET</strong>
 <br />
@@ -34,7 +36,7 @@
     </NotFoundTemplate>
 </BlazoredTypeahead>
 
-<br/>
+<br />
 
 <div class="g-predictionTable">
     <h5>Hall of Fame - On Ballot</h5>
@@ -77,11 +79,18 @@
     </table>
 </div>
 
+<div class="g-predictionChart">
+    <h5>Predictions - Historical Seasons</h5>
+    <!-- Create a div where the graph will take place -->
+    <div id="my_dataviz" style="clear: both;">
+    </div>
+</div>
 
 @code {
 
     public List<MLBBaseballBatter> batters;
     public List<MLBBaseballBatterSeasonPrediction> batterSeasonPredictions;
+    private List<PredictionChartData> predictionChartData;
     private MLBBaseballBatter _selectedBatter;
     private string selectedAlgorithm = "LightGbm"; //default
     private string[] predictionTypes = { "InductedToHallOfFame", "OnHallOfFameBallot" };
@@ -107,6 +116,10 @@
         this.SelectedBatter = batters.Where(a => a.FullPlayerName == MLBBaseballBatter.GetDefaultBatter()).FirstOrDefault();
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await this.RenderChart();
+    }
 
     void OnSelectedAlgorithm(ChangeEventArgs e)
     {
@@ -123,6 +136,17 @@
 
     private void PerformPrediction()
     {
-        batterSeasonPredictions = Util.GetMLBBaseballBatterSeasonPredictions(selectedAlgorithm, SelectedBatter);
+        var predictionData = Util.GetMLBBaseballBatterSeasonPredictions(selectedAlgorithm, SelectedBatter);
+        batterSeasonPredictions = predictionData.MLBBaseballBatterSeasonPredictions;
+        predictionChartData = predictionData.ChartData;
+    }
+
+    private async Task RenderChart()
+    {
+        if (this.selectedAlgorithm == "StackedEnsemble")
+        {
+            var chartArray = this.predictionChartData.ToArray();
+            await JSRuntime.InvokeVoidAsync("createD3SvgObject", chartArray, "Binomial Sample Distribution");
+        }
     }
 }
