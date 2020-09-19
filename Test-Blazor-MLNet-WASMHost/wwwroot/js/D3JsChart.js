@@ -16,7 +16,7 @@ function createD3SvgObject(data, dataMinMax) {
     svgTest.selectAll("*").remove();
 
     // set the dimensions and margins of the graph
-    var margin = { top: 10, right: 25, bottom: 30, left: 10 },
+    var margin = { top: 10, right: 65, bottom: 30, left: 10 },
         width = 370 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
 
@@ -53,45 +53,8 @@ function createD3SvgObject(data, dataMinMax) {
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x));
     svg.append("g")
-        .attr("transform", "translate(335,0)")
+        .attr("transform", "translate(295,0)")
         .call(d3.axisRight(y));
-
-    var tooltip = d3.select("#my_dataviz")
-        .append("div")
-        .style("opacity", 0)
-        .attr("class", "tooltip")
-        .style("background-color", "white")
-        .style("border", "solid")
-        .style("border-width", "1px")
-        .style("border-radius", "5px")
-        .style("padding", "10px");
-
-    // tooltip mouseover event handler
-    var tipMouseover = function (d) {
-
-        //console.log(d);
-
-        var html = "Season: " + d[1].seasonPlayed + "<br/>";// +
-            //"<span style='color:" + color + ";'>" + d.manufacturer + "</span><br/>" +
-            //"<b>" + d.sugar + "</b> sugar, <b/>" + d.calories + "</b> calories";
-
-        console.log(html);
-
-        tooltip.html(html)
-            .style("left", (d3.event.pageX + 15) + "px")
-            .style("top", (d3.event.pageY - 28) + "px")
-            .transition()
-            .duration(200) // ms
-            .style("opacity", .9) // started as 0!
-
-    };
-
-    // tooltip mouseout event handler
-    var tipMouseout = function (d) {
-        tooltip.transition()
-            .duration(300) // ms
-            .style("opacity", 0); // don't care about position!
-    };
 
     svg.append("path")
         .datum(dataArrayMinMaxInductedToHallOfFame)
@@ -126,9 +89,7 @@ function createD3SvgObject(data, dataMinMax) {
         .attr("cy", function (d) { return y(d[1].onHallOfFameBallotProbability); })
         .attr("r", 3)
         .style("fill", "#cc9966")
-        .style("opacity", .5) 
-        .on("mouseover", tipMouseover)
-        .on("mouseout", tipMouseout);
+        .style("opacity", .5);
 
     // Add points - Inducted
     svg.append('g')
@@ -140,9 +101,7 @@ function createD3SvgObject(data, dataMinMax) {
         .attr("cy", function (d) { return y(d[1].inductedToHallOfFameProbability); })
         .attr("r", 3)
         .style("fill", "#6699cc")
-        .style("opacity", .5)
-        .on("mouseover", tipMouseover)
-        .on("mouseout", tipMouseout);
+        .style("opacity", .5);
 
     var selectedItems = [];
     for (i = 0; i != dataArray.length; i++) {
@@ -176,4 +135,23 @@ function createD3SvgObject(data, dataMinMax) {
             .y(function (d) { return y(d[1].onHallOfFameBallotProbability) })
             .curve(d3.curveMonotoneX)
     )
+
+    // Add X axis label:
+    svg.append("text")
+        .attr("text-anchor", "middle")
+        .attr("x", width / 2)
+        .attr("y", height + margin.bottom / 1.25)
+        .text("Season Played")
+        .style("font-size", "9px")
+        .style("font-weight", "bold");
+
+    // Y axis label:
+    svg.append("text")
+        .attr("text-anchor", "middle")
+        .attr("y", -(width+25))
+        .attr("x", height/2)
+        .attr("transform", "rotate(90)")
+        .text("Probability")
+        .style("font-size", "9px")
+        .style("font-weight", "bold");
 }
