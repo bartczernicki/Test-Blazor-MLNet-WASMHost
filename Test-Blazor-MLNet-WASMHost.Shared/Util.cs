@@ -1,6 +1,7 @@
 ﻿using Microsoft.ML;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -154,7 +155,38 @@ namespace Test_Blazor_MLNet_WASMHost.Shared
                     });
                 }
 
+                // Get the min/max for each season
+                var chardDataMin =
+                    chartData
+                        .GroupBy(c => new
+                        {
+                            c.SeasonPlayed
+                        })
+                        .Select(gcs => new PredictionChartDataMinMax()
+                        {
+                            Algorithm = "OnHallOfFameBallot",
+                            SeasonPlayed = gcs.Key.SeasonPlayed,
+                            Min = gcs.Min(g => g.OnHallOfFameBallotProbability),
+                            Max = gcs.Max(g => g.OnHallOfFameBallotProbability)
+                        }).ToList();
+                var chardDataMax =
+                    chartData
+                        .GroupBy(c => new
+                        {
+                            c.SeasonPlayed
+                        })
+                        .Select(gcs => new PredictionChartDataMinMax()
+                        {
+                            Algorithm = "InductedToHallOfFame",
+                            SeasonPlayed = gcs.Key.SeasonPlayed,
+                            Min = gcs.Min(g => g.InductedToHallOfFameProbability),
+                            Max = gcs.Max(g => g.InductedToHallOfFameProbability)
+                        }).ToList();
+
                 predictionData.ChartData = chartData;
+
+                chardDataMin.AddRange(chardDataMax);
+                predictionData.ChartDataMinMax = chardDataMin;
             }
 
             predictionData.MLBBaseballBatterSeasonPredictions = mlbBaseballBatterSeasonPredictions;

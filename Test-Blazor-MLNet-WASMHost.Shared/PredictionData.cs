@@ -10,6 +10,8 @@ namespace Test_Blazor_MLNet_WASMHost.Shared
     {
         public List<PredictionChartData> ChartData { get; set; }
 
+        public List<PredictionChartDataMinMax> ChartDataMinMax { get; set; }
+
         public List<MLBBaseballBatterSeasonPrediction> MLBBaseballBatterSeasonPredictions {get; set;}
     }
 }

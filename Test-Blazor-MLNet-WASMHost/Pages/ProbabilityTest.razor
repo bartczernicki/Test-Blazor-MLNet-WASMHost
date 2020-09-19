@@ -48,7 +48,7 @@
                 <th>Class Label</th>
             </tr>
         </thead>
-        @foreach (var pred in batterSeasonPredictions)
+        @foreach (var pred in this.predictionData.MLBBaseballBatterSeasonPredictions)
         {
             <tr class=@(pred.OnHallOfFameBallotPrediction ? "g-prediction-row" : string.Empty)>
                 <td class="g-seasonNumber">@pred.SeasonNumber</td>
@@ -68,7 +68,7 @@
                 <th>Class Label</th>
             </tr>
         </thead>
-        @foreach (var pred in batterSeasonPredictions)
+        @foreach (var pred in this.predictionData.MLBBaseballBatterSeasonPredictions)
         {
             <tr class=@(pred.InductedToHallOfFamePrediction ? "g-prediction-row" : string.Empty)>
                 <td class="g-seasonNumber">@pred.SeasonNumber</td>
@@ -89,7 +89,7 @@
 @code {
 
     public List<MLBBaseballBatter> batters;
-    public List<MLBBaseballBatterSeasonPrediction> batterSeasonPredictions;
+    public PredictionData predictionData;
     private List<PredictionChartData> predictionChartData;
     private MLBBaseballBatter _selectedBatter;
     private string selectedAlgorithm = "LightGbm"; //default
@@ -136,17 +136,14 @@
 
     private void PerformPrediction()
     {
-        var predictionData = Util.GetMLBBaseballBatterSeasonPredictions(selectedAlgorithm, SelectedBatter);
-        batterSeasonPredictions = predictionData.MLBBaseballBatterSeasonPredictions;
-        predictionChartData = predictionData.ChartData;
+        this.predictionData = Util.GetMLBBaseballBatterSeasonPredictions(selectedAlgorithm, SelectedBatter);
     }
 
     private async Task RenderChart()
     {
         if (this.selectedAlgorithm == "StackedEnsemble")
         {
-            var chartArray = this.predictionChartData.ToArray();
-            await JSRuntime.InvokeVoidAsync("createD3SvgObject", chartArray, "Binomial Sample Distribution");
+            await JSRuntime.InvokeVoidAsync("createD3SvgObject", this.predictionData.ChartData, this.predictionData.ChartDataMinMax);
         }
     }
 }

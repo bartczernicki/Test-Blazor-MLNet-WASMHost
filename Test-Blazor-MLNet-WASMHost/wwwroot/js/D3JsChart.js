@@ -6,9 +6,9 @@ function formatPower(x) {
     return x;
 }
 
-function createD3SvgObject(data, title) {
+function createD3SvgObject(data, dataMinMax) {
 
-    console.log(data);
+    //console.log(data);
     //https://datacadamia.com/viz/d3/histogram#instantiation
     //http://bl.ocks.org/nnattawat/8916402
 
@@ -29,12 +29,16 @@ function createD3SvgObject(data, title) {
         .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")");
 
-    console.log(typeof data);
     //console.log(Object.getOwnPropertyNames(data));
     const dataArray = Object.entries(data);
-    console.log(dataArray);
+    const dataMinMaxArray = Object.entries(dataMinMax);
+    //console.log(dataMinMaxArray);
+    // Add Min & Max Area Range
+    const dataArrayMinMaxOnHallOfFameBallot = dataMinMaxArray.filter(seasonPrediction => (seasonPrediction[1].algorithm == "OnHallOfFameBallot"));
+    const dataArrayMinMaxInductedToHallOfFame = dataMinMaxArray.filter(seasonPrediction => (seasonPrediction[1].algorithm == "InductedToHallOfFame"));
 
-    var maxSeasonPlayed = d3.max(dataArray, d => d[1].seasonPlayed) + 1;
+    // Add one to the max season played for chart clarity
+    var maxSeasonPlayed = d3.max(dataArray, d => d[1].seasonPlayed);
 
     // Add X axis
     var x = d3.scaleLinear()
@@ -48,7 +52,6 @@ function createD3SvgObject(data, title) {
     svg.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x));
-
     svg.append("g")
         .attr("transform", "translate(335,0)")
         .call(d3.axisRight(y));
@@ -90,21 +93,30 @@ function createD3SvgObject(data, title) {
             .style("opacity", 0); // don't care about position!
     };
 
-    // Add dots
-    svg.append('g')
-        .selectAll("dot")
-        .data(dataArray)
-        .enter()
-        .append("circle")
-        .attr("cx", function (d) { return x(d[1].seasonPlayed); })
-        .attr("cy", function (d) { return y(d[1].inductedToHallOfFameProbability); })
-        .attr("r", 3)
-        .style("fill", "#6699cc")
-        .style("opacity", .6) 
-        .on("mouseover", tipMouseover)
-        .on("mouseout", tipMouseout);
+    svg.append("path")
+        .datum(dataArrayMinMaxInductedToHallOfFame)
+        .style("opacity", .4)
+        .attr("fill", "#9fbfdf")
+        .attr("d", d3.area()
+            .x(function (d) { return x(d[1].seasonPlayed) })
+            .y0(function (d) { return y(d[1].min) })
+            .y1(function (d) { return y(d[1].max) })
+            .curve(d3.curveMonotoneX)
+    )
+
+    svg.append("path")
+        .datum(dataArrayMinMaxOnHallOfFameBallot)
+        .style("opacity", .4) 
+        .attr("fill", "#dfbf9f")
+        .attr("d", d3.area()
+            .x(function (d) { return x(d[1].seasonPlayed) })
+            .y0(function (d) { return y(d[1].min) })
+            .y1(function (d) { return y(d[1].max) })
+            .curve(d3.curveMonotoneX)
+    )
 
 
+    // Add points - OnHallOfFame
     svg.append('g')
         .selectAll("dot")
         .data(dataArray)
@@ -114,10 +126,23 @@ function createD3SvgObject(data, title) {
         .attr("cy", function (d) { return y(d[1].onHallOfFameBallotProbability); })
         .attr("r", 3)
         .style("fill", "#cc9966")
-        .style("opacity", .6) 
+        .style("opacity", .5) 
         .on("mouseover", tipMouseover)
         .on("mouseout", tipMouseout);
 
+    // Add points - Inducted
+    svg.append('g')
+        .selectAll("dot")
+        .data(dataArray)
+        .enter()
+        .append("circle")
+        .attr("cx", function (d) { return x(d[1].seasonPlayed); })
+        .attr("cy", function (d) { return y(d[1].inductedToHallOfFameProbability); })
+        .attr("r", 3)
+        .style("fill", "#6699cc")
+        .style("opacity", .5)
+        .on("mouseover", tipMouseover)
+        .on("mouseout", tipMouseout);
 
     var selectedItems = [];
     for (i = 0; i != dataArray.length; i++) {
@@ -128,6 +153,7 @@ function createD3SvgObject(data, title) {
         };
     };
 
+    // Add line - Inducted
     svg.append("path")
         .datum(selectedItems)
         .attr("fill", "none")
@@ -139,7 +165,7 @@ function createD3SvgObject(data, title) {
             .curve(d3.curveMonotoneX)
     )
 
-
+    // Add line - OnHallOfFame
     svg.append("path")
         .datum(selectedItems)
         .attr("fill", "none")
@@ -149,5 +175,5 @@ function createD3SvgObject(data, title) {
             .x(function (d) { return x(d[1].seasonPlayed) })
             .y(function (d) { return y(d[1].onHallOfFameBallotProbability) })
             .curve(d3.curveMonotoneX)
-        )
+    )
 }
