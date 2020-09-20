@@ -31,7 +31,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Data\MLBBaseballBatters.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Models\InductedToHallOfFame-AveragedPerceptron.mlnet">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

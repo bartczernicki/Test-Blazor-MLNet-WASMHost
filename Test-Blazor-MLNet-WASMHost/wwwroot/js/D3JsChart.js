@@ -142,7 +142,7 @@ function createD3SvgObject(data, dataMinMax) {
         .attr("x", width / 2)
         .attr("y", height + margin.bottom / 1.25)
         .text("Season Played")
-        .style("font-size", "9px")
+        .style("font-size", "10px")
         .style("font-weight", "bold");
 
     // Y axis label:
@@ -152,6 +152,6 @@ function createD3SvgObject(data, dataMinMax) {
         .attr("x", height/2)
         .attr("transform", "rotate(90)")
         .text("Probability")
-        .style("font-size", "9px")
+        .style("font-size", "10px")
         .style("font-weight", "bold");
 }
