@@ -53,7 +53,7 @@ function createD3SvgObject(data, dataMinMax) {
     svg.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x));
-    // Add X axis label:
+    // X axis label
     svg.append("text")
         .attr("text-anchor", "middle")
         .attr("x", width / 2)
@@ -69,7 +69,7 @@ function createD3SvgObject(data, dataMinMax) {
     svg.append("g")
         .attr("transform", "translate(295,0)")
         .call(d3.axisRight(y));
-    // Y axis label:
+    // Y axis label
     svg.append("text")
         .attr("text-anchor", "middle")
         .attr("y", -(width + 25))
@@ -78,6 +78,12 @@ function createD3SvgObject(data, dataMinMax) {
         .text("Probability")
         .style("font-size", "10px")
         .style("font-weight", "bold");
+
+    // Legend
+    svg.append("circle").attr("cx", 0).attr("cy", 0).attr("r", 5).style("fill", "#9fbfdf");
+    svg.append("circle").attr("cx", 0).attr("cy", 12).attr("r", 5).style("fill", "#dfbf9f");
+    svg.append("text").attr("x", 6).attr("y", 1).text("Hall of Fame - Inducted").style("font-size", "9px").attr("alignment-baseline", "middle");
+    svg.append("text").attr("x", 6).attr("y", 13).text("Hall of Fame - On Ballot").style("font-size", "9px").attr("alignment-baseline", "middle");
 
 
     // 3) Area Range
