@@ -12,6 +12,21 @@ function createD3SvgObject(data, dataMinMax) {
     //https://datacadamia.com/viz/d3/histogram#instantiation
     //http://bl.ocks.org/nnattawat/8916402
 
+    // Convert set of objects to arrays
+    const dataArray = Object.entries(data);
+    const dataMinMaxArray = Object.entries(dataMinMax);
+    //console.log(dataMinMaxArray);
+    // Create Min & Max Area Range array for simplicity
+    const dataArrayMinMaxOnHallOfFameBallot = dataMinMaxArray.filter(seasonPrediction => (seasonPrediction[1].algorithm == "OnHallOfFameBallot"));
+    const dataArrayMinMaxInductedToHallOfFame = dataMinMaxArray.filter(seasonPrediction => (seasonPrediction[1].algorithm == "InductedToHallOfFame"));
+
+    // Set max seasons played (max range)
+    var maxSeasonPlayed = d3.max(dataArray, d => d[1].seasonPlayed);
+
+
+    // DRAW D3 CHART - SVG
+
+    // 1) Set up chart canvas
     var svgTest = d3.select("#my_dataviz");
     svgTest.selectAll("*").remove();
 
@@ -29,33 +44,45 @@ function createD3SvgObject(data, dataMinMax) {
         .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")");
 
-    //console.log(Object.getOwnPropertyNames(data));
-    const dataArray = Object.entries(data);
-    const dataMinMaxArray = Object.entries(dataMinMax);
-    //console.log(dataMinMaxArray);
-    // Add Min & Max Area Range
-    const dataArrayMinMaxOnHallOfFameBallot = dataMinMaxArray.filter(seasonPrediction => (seasonPrediction[1].algorithm == "OnHallOfFameBallot"));
-    const dataArrayMinMaxInductedToHallOfFame = dataMinMaxArray.filter(seasonPrediction => (seasonPrediction[1].algorithm == "InductedToHallOfFame"));
+    // 2) Add X, Y Axis
 
-    // Add one to the max season played for chart clarity
-    var maxSeasonPlayed = d3.max(dataArray, d => d[1].seasonPlayed);
-
-    // Add X axis
+    // Add - X axis
     var x = d3.scaleLinear()
         .domain([1, maxSeasonPlayed])
         .range([0, width]);
-    // Add Y axis
-    var y = d3.scaleLinear()
-        .domain([0, 1])
-        .range([height, 0]);
-
     svg.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x));
+    // Add X axis label:
+    svg.append("text")
+        .attr("text-anchor", "middle")
+        .attr("x", width / 2)
+        .attr("y", height + margin.bottom / 1.25)
+        .text("Season Played")
+        .style("font-size", "10px")
+        .style("font-weight", "bold");
+
+    // Add - Y axis
+    var y = d3.scaleLinear()
+        .domain([0, 1])
+        .range([height, 0]);
     svg.append("g")
         .attr("transform", "translate(295,0)")
         .call(d3.axisRight(y));
+    // Y axis label:
+    svg.append("text")
+        .attr("text-anchor", "middle")
+        .attr("y", -(width + 25))
+        .attr("x", height / 2)
+        .attr("transform", "rotate(90)")
+        .text("Probability")
+        .style("font-size", "10px")
+        .style("font-weight", "bold");
 
+
+    // 3) Area Range
+
+    // Add - Area Range - Inducted
     svg.append("path")
         .datum(dataArrayMinMaxInductedToHallOfFame)
         .style("opacity", .4)
@@ -67,6 +94,7 @@ function createD3SvgObject(data, dataMinMax) {
             .curve(d3.curveMonotoneX)
     )
 
+    // Add - Area Range - OnHallOfFameBallot
     svg.append("path")
         .datum(dataArrayMinMaxOnHallOfFameBallot)
         .style("opacity", .4) 
@@ -78,8 +106,9 @@ function createD3SvgObject(data, dataMinMax) {
             .curve(d3.curveMonotoneX)
     )
 
+    // 4) Add Prediction Points
 
-    // Add points - OnHallOfFame
+    // Add points - OnHallOfFameBallot
     svg.append('g')
         .selectAll("dot")
         .data(dataArray)
@@ -102,6 +131,9 @@ function createD3SvgObject(data, dataMinMax) {
         .attr("r", 3)
         .style("fill", "#6699cc")
         .style("opacity", .5);
+
+
+    // 5) Add Line for Selected Algorithm 
 
     var selectedItems = [];
     for (i = 0; i != dataArray.length; i++) {
@@ -135,23 +167,4 @@ function createD3SvgObject(data, dataMinMax) {
             .y(function (d) { return y(d[1].onHallOfFameBallotProbability) })
             .curve(d3.curveMonotoneX)
     )
-
-    // Add X axis label:
-    svg.append("text")
-        .attr("text-anchor", "middle")
-        .attr("x", width / 2)
-        .attr("y", height + margin.bottom / 1.25)
-        .text("Season Played")
-        .style("font-size", "10px")
-        .style("font-weight", "bold");
-
-    // Y axis label:
-    svg.append("text")
-        .attr("text-anchor", "middle")
-        .attr("y", -(width+25))
-        .attr("x", height/2)
-        .attr("transform", "rotate(90)")
-        .text("Probability")
-        .style("font-size", "10px")
-        .style("font-weight", "bold");
 }
