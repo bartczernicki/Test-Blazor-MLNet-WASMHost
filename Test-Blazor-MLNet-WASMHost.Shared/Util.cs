@@ -30,7 +30,7 @@ namespace Test_Blazor_MLNet_WASMHost.Shared
             // var test = assembly.GetManifestResourceNames();
             // taskkill /IM dotnet.exe /F /T 2>nul 1>nul
 
-            Stream resource = assembly.GetManifestResourceStream($"Test_Blazor_MLNet_WASMHost.Shared.Data.MLBBaseballBatters.csv");
+            Stream resource = assembly.GetManifestResourceStream($"Test_Blazor_MLNet_WASMHost.Shared.Data.MLBBaseballBattersHistorical.csv");
 
             return resource;
         }

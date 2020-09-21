@@ -72,7 +72,7 @@ namespace Test_Blazor_MLNet_WASMHost.Shared
         public float LastYearPlayed { get; set; }
 
         [LoadColumn(22), ColumnName("ID")]
-        public float ID { get; set; }
+        public string ID { get; set; }
 
         public override string ToString()
         {
@@ -174,7 +174,7 @@ namespace Test_Blazor_MLNet_WASMHost.Shared
             mlbBaseballBatter.TB = float.Parse(values[19], System.Globalization.NumberStyles.Any);
             mlbBaseballBatter.TotalPlayerAwards = float.Parse(values[20], System.Globalization.NumberStyles.Any);
             mlbBaseballBatter.LastYearPlayed = float.Parse(values[21], System.Globalization.NumberStyles.Any);
-            mlbBaseballBatter.ID = float.Parse(values[22], System.Globalization.NumberStyles.Any);
+            mlbBaseballBatter.ID = Convert.ToString(values[22]);
 
             return mlbBaseballBatter;
         }
