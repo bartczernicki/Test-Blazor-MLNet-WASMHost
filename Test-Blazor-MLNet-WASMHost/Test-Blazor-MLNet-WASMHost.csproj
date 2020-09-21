@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <Content Update="wwwroot\js\d3.min.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="wwwroot\js\D3JsChart.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

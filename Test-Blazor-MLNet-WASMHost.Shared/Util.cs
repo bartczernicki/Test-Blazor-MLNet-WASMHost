@@ -144,7 +144,8 @@ namespace Test_Blazor_MLNet_WASMHost.Shared
                             });
 
                         // Only add probabilities for algorithms that return probabilities
-                        if (algorithmName == "FastTree" || algorithmName == "GeneralizedAdditiveModels" || algorithmName == "LightGbm" || algorithmName == "LogisticRegression" || algorithmName == "StochasticGradientDescentCalibrated")
+                        if (algorithmName == "FastTree" || algorithmName == "GeneralizedAdditiveModels" || algorithmName == "LightGbm" || algorithmName == "LogisticRegression" || 
+                        algorithmName == "StochasticGradientDescentCalibrated" || algorithmName == "StackedEnsemble")
                         {
                             chartData.Add(new PredictionChartData
                             {
