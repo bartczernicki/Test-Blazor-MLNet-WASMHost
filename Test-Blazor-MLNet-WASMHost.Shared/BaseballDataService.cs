@@ -23,7 +23,7 @@ namespace Test_Blazor_MLNet_WASMHost.Shared
             }
         }
 
-        public Task<IEnumerable<MLBBaseballBatter>> GetSampleBaseballData()
+        public Task<List<MLBBaseballBatter>> GetSampleBaseballData()
         {
             // Return sample baseball players (batters)
             // Mix of fictitious, active & retired players of all skills
@@ -44,7 +44,7 @@ namespace Test_Blazor_MLNet_WASMHost.Shared
                         .Select(v => MLBBaseballBatter.FromCsv(v));
 
             return Task.FromResult(
-                batters
+                batters.ToList()
             ); ;
         }
     }

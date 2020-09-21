@@ -25,10 +25,10 @@
                    Debounce="150" MaximumSuggestions="50"
                    EnableDropDown="true" ShowDropDownOnFocus="true">
     <SelectedTemplate>
-        <b>@context.FullPlayerName - &nbsp;</b> (Years Played: @context.YearsPlayed, Last Season Played: @context.LastYearPlayed-@(context.LastYearPlayed+1))
+        <b>@context.FullPlayerName - &nbsp;</b> (Years Played: @context.YearsPlayed, Last Season Played: @context.LastYearPlayed-@(context.LastYearPlayed + 1))
     </SelectedTemplate>
     <ResultTemplate>
-        <b>@context.FullPlayerName - &nbsp;</b> (Years Played: @context.YearsPlayed, Last Season Played: @context.LastYearPlayed-@(context.LastYearPlayed+1))
+        <b>@context.FullPlayerName - &nbsp;</b> (Years Played: @context.YearsPlayed, Last Season Played: @context.LastYearPlayed-@(context.LastYearPlayed + 1))
     </ResultTemplate>
     <NotFoundTemplate>
         Sorry, there weren't any baseball players found.
@@ -87,7 +87,7 @@
 
 @code {
 
-    public IEnumerable<MLBBaseballBatter> batters;// = new List<MLBBaseballBatter>(27000);
+    public List<MLBBaseballBatter> batters = new List<MLBBaseballBatter>(27000);
     public List<MLBBaseballBatter> battersLastYear;
     public PredictionData predictionData;
     private List<PredictionChartData> predictionChartData;
@@ -147,9 +147,11 @@
 
     private async Task RenderChart()
     {
-        if (this.selectedAlgorithm == "StackedEnsemble")
+        if (this.predictionData.ChartData == null)
         {
-            await JSRuntime.InvokeVoidAsync("createD3SvgObject", this.predictionData.ChartData, this.predictionData.ChartDataMinMax);
+            this.PerformPrediction();
         }
+
+        await JSRuntime.InvokeVoidAsync("createD3SvgObject", this.predictionData.ChartData, this.predictionData.ChartDataMinMax, selectedAlgorithm);
     }
 }

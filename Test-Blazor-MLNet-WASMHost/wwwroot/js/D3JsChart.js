@@ -1,14 +1,8 @@
-﻿function countUnique(iterable) {
-    return new Set(iterable).size;
-}
-
-function formatPower(x) {
-    return x;
-}
-
-function createD3SvgObject(data, dataMinMax) {
+﻿function createD3SvgObject(data, dataMinMax, selectedAlgorithm) {
 
     //console.log(data);
+    console.log(selectedAlgorithm);
+
     //https://datacadamia.com/viz/d3/histogram#instantiation
     //http://bl.ocks.org/nnattawat/8916402
 
@@ -79,15 +73,6 @@ function createD3SvgObject(data, dataMinMax) {
         .style("font-size", "10px")
         .style("font-weight", "bold");
 
-    // Legend
-    svg.append("circle").attr("cx", 0).attr("cy", 0).attr("r", 5).style("fill", "#dfbf9f");
-    svg.append("circle").attr("cx", 0).attr("cy", 12).attr("r", 5).style("fill", "#9fbfdf");
-    svg.append("text").attr("x", 6).attr("y", 1).text("Hall of Fame - On Ballot")
-        .style("font-size", "9px").attr("alignment-baseline", "middle").style("font-weight", "bold");
-    svg.append("text").attr("x", 6).attr("y", 13).text("Hall of Fame - Inducted")
-        .style("font-size", "9px").attr("alignment-baseline", "middle").style("font-weight", "bold");
-
-
 
     // 3) Area Range
 
@@ -147,7 +132,7 @@ function createD3SvgObject(data, dataMinMax) {
     var selectedItems = [];
     for (i = 0; i != dataArray.length; i++) {
         //console.log(dataArray[i]);
-        if (dataArray[i][1].algorithm == "StackedEnsemble") {
+        if (dataArray[i][1].algorithm == selectedAlgorithm) {
             console.log(dataArray[i]);
             selectedItems.push(dataArray[i]);
         };
@@ -176,4 +161,13 @@ function createD3SvgObject(data, dataMinMax) {
             .y(function (d) { return y(d[1].onHallOfFameBallotProbability) })
             .curve(d3.curveMonotoneX)
     )
+
+    // 6) Add Legend (last so it is top-level)
+    // Legend
+    svg.append("circle").attr("cx", 0).attr("cy", 0).attr("r", 5).style("fill", "#dfbf9f");
+    svg.append("circle").attr("cx", 0).attr("cy", 12).attr("r", 5).style("fill", "#9fbfdf");
+    svg.append("text").attr("x", 6).attr("y", 1).text("Hall of Fame - On Ballot")
+        .style("font-size", "9px").attr("alignment-baseline", "middle").style("font-weight", "bold");
+    svg.append("text").attr("x", 6).attr("y", 13).text("Hall of Fame - Inducted")
+        .style("font-size", "9px").attr("alignment-baseline", "middle").style("font-weight", "bold");
 }

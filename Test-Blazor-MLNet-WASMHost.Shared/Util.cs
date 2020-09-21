@@ -63,50 +63,60 @@ namespace Test_Blazor_MLNet_WASMHost.Shared
 
             var mlbBaseballBatterSeasonPredictions = new List<MLBBaseballBatterSeasonPrediction>();
 
-            if (algorithmName != "StackedEnsemble")
-            {
-                PredictionEngine<MLBBaseballBatter, MLBHOFPrediction> _predictionEngineInductedToHallOfFame =
-                    Util.GetPredictionEngine(mlContext, "InductedToHallOfFame", algorithmName);
-                PredictionEngine<MLBBaseballBatter, MLBHOFPrediction> _predictionEngineOnHallOfFameBallot =
-                    Util.GetPredictionEngine(mlContext, "OnHallOfFameBallot", algorithmName);
+            //if (algorithmName != "StackedEnsemble")
+            //{
+            //    PredictionEngine<MLBBaseballBatter, MLBHOFPrediction> _predictionEngineInductedToHallOfFame =
+            //        Util.GetPredictionEngine(mlContext, "InductedToHallOfFame", algorithmName);
+            //    PredictionEngine<MLBBaseballBatter, MLBHOFPrediction> _predictionEngineOnHallOfFameBallot =
+            //        Util.GetPredictionEngine(mlContext, "OnHallOfFameBallot", algorithmName);
 
-                for (int i = 0; i != mLBBaseballBatter.YearsPlayed; i++)
-                {
-                    var season = i + 1;
-                    var batterSeason = selectedBatterSeasons.Where(s => Convert.ToInt32(s.YearsPlayed) == season).First();
-                    var onHallOfFameBallotPrediction = _predictionEngineOnHallOfFameBallot.Predict(batterSeason);
-                    var inductedToHallOfFamePrediction = _predictionEngineInductedToHallOfFame.Predict(batterSeason);
+            //    for (int i = 0; i != mLBBaseballBatter.YearsPlayed; i++)
+            //    {
+            //        var season = i + 1;
+            //        var batterSeason = selectedBatterSeasons.Where(s => Convert.ToInt32(s.YearsPlayed) == season).First();
+            //        var onHallOfFameBallotPrediction = _predictionEngineOnHallOfFameBallot.Predict(batterSeason);
+            //        var inductedToHallOfFamePrediction = _predictionEngineInductedToHallOfFame.Predict(batterSeason);
 
-                    var seasonPrediction = new MLBBaseballBatterSeasonPrediction
-                    {
-                        SeasonNumber = season,
-                        FullPlayerName = mLBBaseballBatter.FullPlayerName,
-                        InductedToHallOfFamePrediction = inductedToHallOfFamePrediction.Prediction,
-                        InductedToHallOfFameProbability = Math.Round(inductedToHallOfFamePrediction.Probability, 5, MidpointRounding.AwayFromZero),
-                        OnHallOfFameBallotPrediction = onHallOfFameBallotPrediction.Prediction,
-                        OnHallOfFameBallotProbability = Math.Round(onHallOfFameBallotPrediction.Probability, 5, MidpointRounding.AwayFromZero)
-                    };
+            //        var seasonPrediction = new MLBBaseballBatterSeasonPrediction
+            //        {
+            //            SeasonNumber = season,
+            //            FullPlayerName = mLBBaseballBatter.FullPlayerName,
+            //            InductedToHallOfFamePrediction = inductedToHallOfFamePrediction.Prediction,
+            //            InductedToHallOfFameProbability = Math.Round(inductedToHallOfFamePrediction.Probability, 5, MidpointRounding.AwayFromZero),
+            //            OnHallOfFameBallotPrediction = onHallOfFameBallotPrediction.Prediction,
+            //            OnHallOfFameBallotProbability = Math.Round(onHallOfFameBallotPrediction.Probability, 5, MidpointRounding.AwayFromZero)
+            //        };
 
-                    seasonPrediction.InductedToHallOfFameProbabilityLabel = (seasonPrediction.InductedToHallOfFameProbability == 0f) ? "N/A" : seasonPrediction.InductedToHallOfFameProbability.ToString();
-                    seasonPrediction.OnHallOfFameBallotProbabilityLabel = (seasonPrediction.OnHallOfFameBallotProbability == 0f) ? "N/A" : seasonPrediction.OnHallOfFameBallotProbability.ToString();
+            //        seasonPrediction.InductedToHallOfFameProbabilityLabel = (seasonPrediction.InductedToHallOfFameProbability == 0f) ? "N/A" : seasonPrediction.InductedToHallOfFameProbability.ToString();
+            //        seasonPrediction.OnHallOfFameBallotProbabilityLabel = (seasonPrediction.OnHallOfFameBallotProbability == 0f) ? "N/A" : seasonPrediction.OnHallOfFameBallotProbability.ToString();
 
 
-                    mlbBaseballBatterSeasonPredictions.Add(seasonPrediction);
-                }
-            }
-            else
-            {
+            //        mlbBaseballBatterSeasonPredictions.Add(seasonPrediction);
+            //    }
+            //}
+            //else
+            //{
                 var chartData = new List<PredictionChartData>();
 
                 var algorithNamesForEnsemble = new List<string> { "FastTree", "GeneralizedAdditiveModels", "LightGbm", 
                     "LogisticRegression", "StochasticGradientDescentCalibrated" };
 
+                // If algorithm is selected that does not return probabilities add it
+                var exists = algorithNamesForEnsemble.Exists(a => a.Contains(algorithmName));
+
+                if ((!exists) && (algorithmName != "StackedEnsemble"))
+                {
+                    algorithNamesForEnsemble.Add(algorithmName);
+                }
+
                 for (int i = 0; i != mLBBaseballBatter.YearsPlayed; i++)
                 {
                     var season = i + 1;
                     var batterSeason = selectedBatterSeasons.Where(s => Convert.ToInt32(s.YearsPlayed) == season).First();
-                    var probabilitiesInducted = new List<float>();
-                    var probabilitiesOnHallOfFameBallot = new List<float>();
+                    MLBBaseballBatterSeasonPrediction seasonPrediction;
+
+                    var probabilitiesInducted = new List<AlgorithmPrediction>();
+                    var probabilitiesOnHallOfFameBallot = new List<AlgorithmPrediction>();
 
                     foreach (var algorithmNameEnsemble in algorithNamesForEnsemble)
                     {
@@ -118,36 +128,74 @@ namespace Test_Blazor_MLNet_WASMHost.Shared
                         var onHallOfFameBallotPredictionEnsemble = _predictionEngineOnHallOfFameBallotEnsemble.Predict(batterSeason);
                         var inductedToHallOfFamePredictionEnsemble = _predictionEngineInductedToHallOfFameEnsemble.Predict(batterSeason);
 
-                        probabilitiesInducted.Add(inductedToHallOfFamePredictionEnsemble.Probability);
-                        probabilitiesOnHallOfFameBallot.Add(onHallOfFameBallotPredictionEnsemble.Probability);
+                        probabilitiesInducted.Add(
+                            new AlgorithmPrediction
+                            {
+                                AlgorithmName = algorithmNameEnsemble,
+                                Prediction = inductedToHallOfFamePredictionEnsemble.Prediction,
+                                Probability = inductedToHallOfFamePredictionEnsemble.Probability
+                            });
+                        probabilitiesOnHallOfFameBallot.Add(
+                            new AlgorithmPrediction
+                            {
+                                AlgorithmName = algorithmNameEnsemble,
+                                Prediction = onHallOfFameBallotPredictionEnsemble.Prediction,
+                                Probability = onHallOfFameBallotPredictionEnsemble.Probability
+                            });
 
-                        chartData.Add(new PredictionChartData
+                        // Only add probabilities for algorithms that return probabilities
+                        if (algorithmName == "FastTree" || algorithmName == "GeneralizedAdditiveModels" || algorithmName == "LightGbm" || algorithmName == "LogisticRegression" || algorithmName == "StochasticGradientDescentCalibrated")
                         {
-                            Algorithm = algorithmNameEnsemble,
-                            InductedToHallOfFameProbability = inductedToHallOfFamePredictionEnsemble.Probability,
-                            OnHallOfFameBallotProbability = onHallOfFameBallotPredictionEnsemble.Probability,
-                            SeasonPlayed = season
-                        });
-                    }
+                            chartData.Add(new PredictionChartData
+                            {
+                                Algorithm = algorithmNameEnsemble,
+                                InductedToHallOfFameProbability = inductedToHallOfFamePredictionEnsemble.Probability,
+                                OnHallOfFameBallotProbability = onHallOfFameBallotPredictionEnsemble.Probability,
+                                SeasonPlayed = season
+                            });
+                        }
 
-                    float probabilityInducted = probabilitiesInducted.Sum() / algorithNamesForEnsemble.Count();
-                    float probabilityOnHallOfFameBallot = probabilitiesOnHallOfFameBallot.Sum() / algorithNamesForEnsemble.Count();
+                    } // EOF Foreach Algorithm Ensemble
 
-                    var seasonPrediction = new MLBBaseballBatterSeasonPrediction
+
+                    if (algorithmName == "StackedEnsemble")
                     {
-                        SeasonNumber = season,
-                        FullPlayerName = mLBBaseballBatter.FullPlayerName,
-                        InductedToHallOfFamePrediction = (probabilityInducted > 0.5f) ? true : false,
-                        InductedToHallOfFameProbability = Math.Round(probabilityInducted, 5, MidpointRounding.AwayFromZero),
-                        OnHallOfFameBallotPrediction = (probabilityOnHallOfFameBallot > 0.5f) ? true : false,
-                        OnHallOfFameBallotProbability = Math.Round(probabilityOnHallOfFameBallot, 5, MidpointRounding.AwayFromZero)
-                    };
+                        // Average out predictions for ensemble
+                        float probabilityInducted = probabilitiesInducted.Select(a => a.Probability).Sum() / 5;
+                        float probabilityOnHallOfFameBallot = probabilitiesOnHallOfFameBallot.Select(a => a.Probability).Sum() / 5;
+
+                        seasonPrediction = new MLBBaseballBatterSeasonPrediction
+                        {
+                            SeasonNumber = season,
+                            FullPlayerName = mLBBaseballBatter.FullPlayerName,
+                            InductedToHallOfFamePrediction = (probabilityInducted > 0.5f) ? true : false,
+                            InductedToHallOfFameProbability = Math.Round(probabilityInducted, 5, MidpointRounding.AwayFromZero),
+                            OnHallOfFameBallotPrediction = (probabilityOnHallOfFameBallot > 0.5f) ? true : false,
+                            OnHallOfFameBallotProbability = Math.Round(probabilityOnHallOfFameBallot, 5, MidpointRounding.AwayFromZero)
+                        };
+                    }
+                    else
+                    {
+                    // Average out predictions for ensemble
+                        float probabilityInducted = probabilitiesInducted.Where(a => a.AlgorithmName == algorithmName).FirstOrDefault()?.Probability ?? 0f;
+                        float probabilityOnHallOfFameBallot = probabilitiesOnHallOfFameBallot.Where(a => a.AlgorithmName == algorithmName).FirstOrDefault()?.Probability ?? 0f;
+
+                        seasonPrediction = new MLBBaseballBatterSeasonPrediction
+                        {
+                            SeasonNumber = season,
+                            FullPlayerName = mLBBaseballBatter.FullPlayerName,
+                            InductedToHallOfFamePrediction = probabilitiesInducted.Where(a => a.AlgorithmName == algorithmName).FirstOrDefault().Prediction,
+                            InductedToHallOfFameProbability = Math.Round(probabilityInducted, 5, MidpointRounding.AwayFromZero),
+                            OnHallOfFameBallotPrediction = probabilitiesOnHallOfFameBallot.Where(a => a.AlgorithmName == algorithmName).FirstOrDefault().Prediction,
+                            OnHallOfFameBallotProbability = Math.Round(probabilityOnHallOfFameBallot, 5, MidpointRounding.AwayFromZero)
+                        };
+                    }
 
                     seasonPrediction.InductedToHallOfFameProbabilityLabel = (seasonPrediction.InductedToHallOfFameProbability == 0f) ? "N/A" : seasonPrediction.InductedToHallOfFameProbability.ToString();
                     seasonPrediction.OnHallOfFameBallotProbabilityLabel = (seasonPrediction.OnHallOfFameBallotProbability == 0f) ? "N/A" : seasonPrediction.OnHallOfFameBallotProbability.ToString();
-
-
                     mlbBaseballBatterSeasonPredictions.Add(seasonPrediction);
+
+                    // Add StackedEnsemble always to the ChartData
                     chartData.Add(new PredictionChartData
                     {
                         Algorithm = "StackedEnsemble",
@@ -155,7 +203,7 @@ namespace Test_Blazor_MLNet_WASMHost.Shared
                         OnHallOfFameBallotProbability = seasonPrediction.OnHallOfFameBallotProbability,
                         SeasonPlayed = season
                     });
-                }
+                //}
 
                 // Get the min/max for each season
                 var chardDataMin =
