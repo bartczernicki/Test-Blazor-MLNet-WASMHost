@@ -80,10 +80,13 @@ function createD3SvgObject(data, dataMinMax) {
         .style("font-weight", "bold");
 
     // Legend
-    svg.append("circle").attr("cx", 0).attr("cy", 0).attr("r", 5).style("fill", "#9fbfdf");
-    svg.append("circle").attr("cx", 0).attr("cy", 12).attr("r", 5).style("fill", "#dfbf9f");
-    svg.append("text").attr("x", 6).attr("y", 1).text("Hall of Fame - Inducted").style("font-size", "9px").attr("alignment-baseline", "middle");
-    svg.append("text").attr("x", 6).attr("y", 13).text("Hall of Fame - On Ballot").style("font-size", "9px").attr("alignment-baseline", "middle");
+    svg.append("circle").attr("cx", 0).attr("cy", 0).attr("r", 5).style("fill", "#dfbf9f");
+    svg.append("circle").attr("cx", 0).attr("cy", 12).attr("r", 5).style("fill", "#9fbfdf");
+    svg.append("text").attr("x", 6).attr("y", 1).text("Hall of Fame - On Ballot")
+        .style("font-size", "9px").attr("alignment-baseline", "middle").style("font-weight", "bold");
+    svg.append("text").attr("x", 6).attr("y", 13).text("Hall of Fame - Inducted")
+        .style("font-size", "9px").attr("alignment-baseline", "middle").style("font-weight", "bold");
+
 
 
     // 3) Area Range
