@@ -53,7 +53,7 @@ namespace Test_Blazor_MLNet_WASMHost.Shared
             return _predictionEngine;
         }
 
-        public static PredictionData GetMLBBaseballBatterSeasonPredictions(string algorithmName, MLBBaseballBatter mLBBaseballBatter)
+        public static PredictionData GetMLBBaseballBatterSeasonPredictions(string algorithmName, MLBBaseballBatter mLBBaseballBatter, List<MLBBaseballBatter> selectedBatterSeasons)
         {
             // Object to return
             var predictionData = new PredictionData();
@@ -73,8 +73,9 @@ namespace Test_Blazor_MLNet_WASMHost.Shared
                 for (int i = 0; i != mLBBaseballBatter.YearsPlayed; i++)
                 {
                     var season = i + 1;
-                    var onHallOfFameBallotPrediction = _predictionEngineOnHallOfFameBallot.Predict(mLBBaseballBatter.CalculateStatisticsProratedBySeason(season));
-                    var inductedToHallOfFamePrediction = _predictionEngineInductedToHallOfFame.Predict(mLBBaseballBatter.CalculateStatisticsProratedBySeason(season));
+                    var batterSeason = selectedBatterSeasons.Where(s => Convert.ToInt32(s.YearsPlayed) == season).First();
+                    var onHallOfFameBallotPrediction = _predictionEngineOnHallOfFameBallot.Predict(batterSeason);
+                    var inductedToHallOfFamePrediction = _predictionEngineInductedToHallOfFame.Predict(batterSeason);
 
                     var seasonPrediction = new MLBBaseballBatterSeasonPrediction
                     {
@@ -103,6 +104,7 @@ namespace Test_Blazor_MLNet_WASMHost.Shared
                 for (int i = 0; i != mLBBaseballBatter.YearsPlayed; i++)
                 {
                     var season = i + 1;
+                    var batterSeason = selectedBatterSeasons.Where(s => Convert.ToInt32(s.YearsPlayed) == season).First();
                     var probabilitiesInducted = new List<float>();
                     var probabilitiesOnHallOfFameBallot = new List<float>();
 
@@ -113,8 +115,8 @@ namespace Test_Blazor_MLNet_WASMHost.Shared
                         PredictionEngine<MLBBaseballBatter, MLBHOFPrediction> _predictionEngineOnHallOfFameBallotEnsemble =
                             Util.GetPredictionEngine(mlContext, "OnHallOfFameBallot", algorithmNameEnsemble);
 
-                        var onHallOfFameBallotPredictionEnsemble = _predictionEngineOnHallOfFameBallotEnsemble.Predict(mLBBaseballBatter.CalculateStatisticsProratedBySeason(season));
-                        var inductedToHallOfFamePredictionEnsemble = _predictionEngineInductedToHallOfFameEnsemble.Predict(mLBBaseballBatter.CalculateStatisticsProratedBySeason(season));
+                        var onHallOfFameBallotPredictionEnsemble = _predictionEngineOnHallOfFameBallotEnsemble.Predict(batterSeason);
+                        var inductedToHallOfFamePredictionEnsemble = _predictionEngineInductedToHallOfFameEnsemble.Predict(batterSeason);
 
                         probabilitiesInducted.Add(inductedToHallOfFamePredictionEnsemble.Probability);
                         probabilitiesOnHallOfFameBallot.Add(onHallOfFameBallotPredictionEnsemble.Probability);

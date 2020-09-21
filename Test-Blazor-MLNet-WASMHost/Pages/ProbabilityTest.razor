@@ -17,13 +17,12 @@
     <option value="StackedEnsemble">Stacked Ensemble</option>
     <option value="StochasticGradientDescentCalibrated">StochasticGradientDescentCalibrated</option>
     <option value="StochasticGradientDescentNonCalibrated">StochasticGradientDescentNonCalibrated</option>
-    @*<option value="LinearSupportVectorMachines">LinearSupportVectorMachines</option>*@
 </select>
 
 <small class="form-text text-muted"><b>Select or Search</b> any MLB Batter to perform prediction:</small>
 <BlazoredTypeahead SearchMethod="@SearchBaseballPlayers"
                    @bind-Value="@SelectedBatter"
-                   Debounce="150" MaximumSuggestions="25"
+                   Debounce="150" MaximumSuggestions="50"
                    EnableDropDown="true" ShowDropDownOnFocus="true">
     <SelectedTemplate>
         <b>@context.FullPlayerName - &nbsp;</b> (Years Played: @context.YearsPlayed, Last Season Played: @context.LastYearPlayed-@(context.LastYearPlayed+1))
@@ -37,7 +36,7 @@
 </BlazoredTypeahead>
 
 <br />
-
+<small class="form-text text-muted"><b>Note: </b>Models that do not return probability vlaues (only labels) will show as N/A</small>
 <div class="g-predictionTable">
     <h5>Hall of Fame - On Ballot</h5>
     <table>
@@ -88,7 +87,7 @@
 
 @code {
 
-    public List<MLBBaseballBatter> batters;
+    public IEnumerable<MLBBaseballBatter> batters;// = new List<MLBBaseballBatter>(27000);
     public List<MLBBaseballBatter> battersLastYear;
     public PredictionData predictionData;
     private List<PredictionChartData> predictionChartData;
@@ -142,7 +141,8 @@
 
     private void PerformPrediction()
     {
-        this.predictionData = Util.GetMLBBaseballBatterSeasonPredictions(selectedAlgorithm, SelectedBatter);
+        var selectedBatterSeasons = batters.Where(b => b.ID == this.SelectedBatter.ID).ToList();
+        this.predictionData = Util.GetMLBBaseballBatterSeasonPredictions(selectedAlgorithm, SelectedBatter, selectedBatterSeasons);
     }
 
     private async Task RenderChart()
