@@ -1,12 +1,11 @@
 ﻿@page "/ProbabilityTest"
-@inject BaseballDataSampleService BaseballDataService
 @inject IJSRuntime JSRuntime
 
 
 <strong class="form-text">Local prediction inference in Blazor and ML.NET</strong>
 <small class="form-text text-muted"><b>Select </b> the algorithm used in the ML.NET model for prediction:</small>
 <small class="form-text text-muted"><b>Note: </b>Models that do not return probability vlaues (only labels) will show value as N/A</small>
-<select id="algorithmName" @onchange="OnSelectedAlgorithm">
+<select id="algorithmName" @onchange="OnSelectedAlgorithm" class="dropDown">
     <option value="AveragedPerceptron">AveragedPerceptron</option>
     <option value="FastForest">FastForest</option>
     <option value="FastTree">FastTree</option>
@@ -116,22 +115,6 @@
     private string button = "[-]";
     private string buttonChart = "[-]";
 
-    private void ChangeButtonAppearance(MouseEventArgs e)
-    {
-        var eventArgs = e;
-
-        cardDetailsStyle = (cardDetailsStyle == "card-details-hidden") ? ("card-details-visible") : ("card-details-hidden");
-        button = (button == "[-]") ? ("[+]") : ("[-]");
-    }
-
-    private void ChangeChartButtonAppearance(MouseEventArgs e)
-    {
-        var eventArgs = e;
-
-        cardDetailsChartStyle = (cardDetailsChartStyle == "card-details-hidden") ? ("card-details-visible") : ("card-details-hidden");
-        buttonChart = (buttonChart == "[-]") ? ("[+]") : ("[-]");
-    }
-
     public List<MLBBaseballBatter> batters = new List<MLBBaseballBatter>(27000);
     public List<MLBBaseballBatter> battersLastYear;
     public PredictionData predictionData;
@@ -153,10 +136,11 @@
 
     private string probability = "0";
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         // Build baseball batters list
-        batters = await BaseballDataService.GetSampleBaseballData();
+
+        batters = BaseballDataSampleService.Instance.SampleBaseBallData;
 
         this.battersLastYear = batters
           .OrderByDescending(a => a.YearsPlayed)
@@ -182,6 +166,22 @@
     private async Task<IEnumerable<MLBBaseballBatter>> SearchBaseballPlayers(string searchText)
     {
         return await Task.FromResult(battersLastYear.Where(x => x.FullPlayerName.ToLower().Contains(searchText.ToLower())).ToList());
+    }
+
+    private void ChangeButtonAppearance(MouseEventArgs e)
+    {
+        var eventArgs = e;
+
+        cardDetailsStyle = (cardDetailsStyle == "card-details-hidden") ? ("card-details-visible") : ("card-details-hidden");
+        button = (button == "[-]") ? ("[+]") : ("[-]");
+    }
+
+    private void ChangeChartButtonAppearance(MouseEventArgs e)
+    {
+        var eventArgs = e;
+
+        cardDetailsChartStyle = (cardDetailsChartStyle == "card-details-hidden") ? ("card-details-visible") : ("card-details-hidden");
+        buttonChart = (buttonChart == "[-]") ? ("[+]") : ("[-]");
     }
 
     private void PerformPrediction()

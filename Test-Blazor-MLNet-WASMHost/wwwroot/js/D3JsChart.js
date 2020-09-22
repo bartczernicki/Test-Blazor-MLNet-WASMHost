@@ -175,7 +175,7 @@
         .attr("width", 9)
         .attr("height", 3)
         .style("fill", "#cc9966");
-    svg.append("rect").attr("x", -4).attr("y", 23)
+    svg.append("rect").attr("x", -4).attr("y", 23.5)
         .attr("width", 9)
         .attr("height", 3)
         .style("fill", "#6699cc");

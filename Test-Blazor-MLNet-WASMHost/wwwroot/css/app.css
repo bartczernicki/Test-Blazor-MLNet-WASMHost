@@ -49,6 +49,15 @@ a, .btn-link {
         top: 0.5rem;
     }
 
+/* Dropdown List*/
+.dropDown {
+    width: 100%;
+}
+
+.form-text {
+    display: block !important;
+    margin-top: 0;
+}
 
 /* Card Style */
 .card {
@@ -150,6 +159,12 @@ a, .btn-link {
     padding-bottom: 4px;
     min-width: 50px;
     outline: none;
+    outline: none !important;
+}
+
+showMeButton:focus {
+    border: none;
+    outline: none !important;
 }
 
 .containerHeader {

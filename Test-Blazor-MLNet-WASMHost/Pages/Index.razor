@@ -11,36 +11,3 @@
     <b>GitHub Source Code (Blazor WASM with ASP.NET Core Host): </b>
     <a href="https://github.com/bartczernicki/Test-Blazor-MLNet" target="_blank">GitHub Source Code Repository</a>
 </h6>
-
-<div class="card" style="min-height: 0px;">
-    <div class="containerHeader">
-        <div class="fixedHeader">
-            <button class="showMeButton" @onclick="ChangeButtonAppearance">
-                [+]<i class="fa @chevronCircleStyle fa-lg" />
-            </button>
-        </div>
-        <span class="verticalHeader">Test Message</span>
-    </div>
-    <div class="@cardDetailsStyle">
-        <small class="form-text text-muted"><b>Bold Directions&nbsp;&nbsp;</b></small>
-        <small class="form-text text-muted">Samll directions</small>
-        <br />
-        
-    </div>
-</div>
-
-@code {
-
-    // Variables
-    private string chevronCircleStyle = "fa-chevron-circle-up";
-    private string cardDetailsStyle = "card-details-hidden";
-
-    private void ChangeButtonAppearance(MouseEventArgs e)
-    {
-        var eventArgs = e;
-
-        cardDetailsStyle = (cardDetailsStyle == "card-details-hidden") ? ("card-details-visible") : ("card-details-hidden");
-        chevronCircleStyle = (chevronCircleStyle == "fa-chevron-circle-up") ? ("fa-chevron-circle-down") : ("fa-chevron-circle-up");
-    }
-
-}

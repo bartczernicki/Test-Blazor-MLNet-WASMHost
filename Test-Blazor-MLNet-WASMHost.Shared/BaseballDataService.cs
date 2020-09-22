@@ -7,8 +7,27 @@ using System.Threading.Tasks;
 
 namespace Test_Blazor_MLNet_WASMHost.Shared
 {
-    public class BaseballDataSampleService
+    public sealed class BaseballDataSampleService
     {
+        private static readonly BaseballDataSampleService instance = new BaseballDataSampleService();
+
+        private BaseballDataSampleService()
+        {
+            SampleBaseBallData = GetSampleBaseballData().Result;
+        }
+
+        static BaseballDataSampleService()
+        {
+        }
+
+        public static BaseballDataSampleService Instance
+        {
+            get
+            {
+                return instance;
+            }
+        }
+
         public IEnumerable<string> ReadLines(Func<Stream> streamProvider,
                              Encoding encoding)
         {
@@ -47,5 +66,12 @@ namespace Test_Blazor_MLNet_WASMHost.Shared
                 batters.ToList()
             ); ;
         }
+
+        public List<MLBBaseballBatter> SampleBaseBallData
+        {
+            get;
+            set;
+        }
+   
     }
 }

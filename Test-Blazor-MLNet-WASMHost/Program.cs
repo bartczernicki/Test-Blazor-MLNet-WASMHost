@@ -1,13 +1,8 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using Test_Blazor_MLNet_WASMHost.Shared;
 
 namespace Test_Blazor_MLNet_WASMHost
 {
@@ -21,7 +16,7 @@ namespace Test_Blazor_MLNet_WASMHost
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
             // Add Baseball data service (from CSV resource)
-            builder.Services.AddSingleton<BaseballDataSampleService>();
+            //builder.Services.AddSingleton<BaseballDataSampleService>();
 
             await builder.Build().RunAsync();
         }
