@@ -69,7 +69,7 @@
         .attr("y", -(width + 27))
         .attr("x", height / 2)
         .attr("transform", "rotate(90)")
-        .text("Probability - " + selectedAlgorithm)
+        .text("Probability")
         .style("font-size", "10px")
         .style("font-weight", "bold");
 
@@ -163,23 +163,22 @@
     )
 
     // 6) Add Legend (last so it is top-level)
-    // Legend
-    // Points
+    // Legend - Points
     svg.append("circle").attr("cx", 0).attr("cy", 0).attr("r", 5).style("fill", "#dfbf9f");
     svg.append("circle").attr("cx", 0).attr("cy", 12).attr("r", 5).style("fill", "#9fbfdf");
     svg.append("text").attr("x", 6).attr("y", 1).text("Hall of Fame - On Ballot")
         .style("font-size", "8px").attr("alignment-baseline", "middle").style("font-weight", "bold");
     svg.append("text").attr("x", 6).attr("y", 13).text("Hall of Fame - Inducted")
         .style("font-size", "8px").attr("alignment-baseline", "middle").style("font-weight", "bold");
-    // Line
-    //svg.append("rect").attr("x", -4).attr("y", 20)
-    //    .attr("width", 9)
-    //    .attr("height", 3)
-    //    .style("fill", "#cc9966");
-    //svg.append("rect").attr("x", -4).attr("y", 24)
-    //    .attr("width", 9)
-    //    .attr("height", 3)
-    //    .style("fill", "#6699cc");
-    //svg.append("text").attr("x", 6).attr("y", 24).text("Stacked Ensemble")
-    //    .style("font-size", "8px").attr("alignment-baseline", "middle").style("font-weight", "bold");
+    // Legend - Line
+    svg.append("rect").attr("x", -4).attr("y", 20)
+        .attr("width", 9)
+        .attr("height", 3)
+        .style("fill", "#cc9966");
+    svg.append("rect").attr("x", -4).attr("y", 23)
+        .attr("width", 9)
+        .attr("height", 3)
+        .style("fill", "#6699cc");
+    svg.append("text").attr("x", 6).attr("y", 24).text(selectedAlgorithm)
+        .style("font-size", "8px").attr("alignment-baseline", "middle").style("font-weight", "bold");
 }
