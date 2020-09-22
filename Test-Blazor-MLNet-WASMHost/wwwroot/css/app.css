@@ -49,6 +49,153 @@ a, .btn-link {
         top: 0.5rem;
     }
 
+
+/* Card Style */
+.card {
+    -moz-box-direction: normal;
+    -moz-box-orient: vertical;
+    background-color: #fff;
+    border-radius: 0.25rem;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin-bottom: 1px;
+    border: none;
+}
+
+.card-header:first-child {
+    border-radius: 0;
+}
+
+.card-header {
+    background-color: #f7f7f9;
+    margin-bottom: 0;
+    padding: 0px 1.25rem;
+    border: none;
+}
+
+    .card-header a i {
+        float: left;
+        font-size: 10px;
+        padding: 2px 0;
+        margin: 0 1px 0 0px;
+        color: #195C9D;
+    }
+
+    .card-header i {
+        float: right;
+        font-size: 10px;
+        width: 1%;
+        margin-top: 1px;
+        margin-right: 1px;
+    }
+
+    .card-header a {
+        width: 97%;
+        float: left;
+        color: #565656;
+    }
+
+    .card-header p {
+        margin: 0;
+    }
+
+    .card-header h3 {
+        margin: 0 0 0px;
+        font-size: 10px;
+        font-weight: bold;
+        color: #3fc199;
+    }
+
+.card-block {
+    -moz-box-flex: 1;
+    flex: 1 1 auto;
+    padding: 1px;
+    /*color: #232323;*/
+    box-shadow: inset 0px 4px 5px rgba(0,0,0,0.1);
+    border-top: 1px soild #000;
+    border-radius: 0;
+}
+
+.showMore {
+    font-size: 14px;
+    display: block;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.showMoreLabel {
+    display: block;
+    cursor: pointer;
+    color: #B4886B;
+    font-weight: bold;
+    display: block;
+    width: 150px;
+    float: left;
+    background-color: rgba(158, 148, 11, 1);
+    color: rgba(255, 255, 255, 1);
+}
+
+.showMeButton {
+    background-color: #ecf0f4;
+    /*    border-color: #007bff;*/
+    border: none;
+    /*    color: white;*/
+    font-size: 10px;
+    text-align: center;
+    text-decoration: none;
+    /*    display: inline-block;*/
+    display: table-cell;
+    vertical-align: middle;
+    padding-bottom: 4px;
+    min-width: 50px;
+    outline: none;
+}
+
+.containerHeader {
+    display: flex;
+    padding: 1px 1px 1px 1px;
+    background-color: #ecf0f4;
+}
+
+.fixedHeader {
+    /*    width: 120px;*/
+}
+
+.fixedHeader h5 {
+    display: table-cell;
+    vertical-align: middle
+}
+
+.flex-itemHeader {
+    flex-grow: 1;
+    padding: 10px 5px 10px 5px;
+    text-align: left;
+}
+
+.card-details-hidden {
+    overflow: hidden;
+    height: 0;
+    opacity: 0;
+    transition: height 0ms 1s, opacity 1s 0ms;
+}
+
+.card-details-visible {
+    height: auto;
+    opacity: 1;
+    transition: height 0ms 0ms, opacity 1s 0ms;
+    padding: 10px 5px 10px 14px;
+}
+
+.verticalHeader {
+    display: table-cell;
+    vertical-align: middle;
+    font-size:smaller;
+/*    font-weight: 400;*/
+    text-transform: uppercase;
+    padding-top: 2px;
+}
+
 /* Prediction Table */
 h5 {
     font-size: 14px;

@@ -20,9 +20,9 @@
 
 <small class="form-text text-muted"><b>Select or Search</b> any MLB Batter to perform prediction:</small>
 <BlazoredTypeahead SearchMethod="@SearchBaseballPlayers"
-                   @bind-Value="@SelectedBatter"
-                   Debounce="150" MaximumSuggestions="50"
-                   EnableDropDown="true" ShowDropDownOnFocus="true">
+        @bind-Value="@SelectedBatter"
+        Debounce="150" MaximumSuggestions="50"
+        EnableDropDown="true" ShowDropDownOnFocus="true">
     <SelectedTemplate>
         <b>@context.FullPlayerName - &nbsp;</b> (Years Played: @context.YearsPlayed, Last Season Played: @context.LastYearPlayed-@(context.LastYearPlayed + 1))
     </SelectedTemplate>
@@ -34,56 +34,103 @@
     </NotFoundTemplate>
 </BlazoredTypeahead>
 
+<br/>
+<div class="card" style="min-height: 0px;">
+    <div class="containerHeader">
+        <div class="fixedHeader">
+            <button class="showMeButton" @onclick="ChangeButtonAppearance">
+                @button
+            </button>
+        </div>
+        <span class="verticalHeader">Prediction Tables</span>
+    </div>
+    <div class="@cardDetailsStyle">
+        <div class="g-predictionTable">
+            <h5>Hall of Fame - On Ballot</h5>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Year Played</th>
+                        <th>Probability</th>
+                        <th>Class Label</th>
+                    </tr>
+                </thead>
+                @foreach (var pred in this.predictionData.MLBBaseballBatterSeasonPredictions)
+                {
+                    <tr class=@(pred.OnHallOfFameBallotPrediction ? "g-prediction-row" : string.Empty)>
+                        <td class="g-seasonNumber">@pred.SeasonNumber</td>
+                        <td>@pred.OnHallOfFameBallotProbabilityLabel</td>
+                        <td class="g-prediction"><div class=@(pred.OnHallOfFameBallotPrediction ? "g-prediction-true" : string.Empty)>@pred.OnHallOfFameBallotPrediction</div></td>
+                    </tr>
+                }
+            </table>
+        </div>
+        <div class="g-predictionTable">
+            <h5>Hall of Fame - Induction</h5>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Year Played</th>
+                        <th>Probability</th>
+                        <th>Class Label</th>
+                    </tr>
+                </thead>
+                @foreach (var pred in this.predictionData.MLBBaseballBatterSeasonPredictions)
+                {
+                    <tr class=@(pred.InductedToHallOfFamePrediction ? "g-prediction-row" : string.Empty)>
+                        <td class="g-seasonNumber">@pred.SeasonNumber</td>
+                        <td>@pred.InductedToHallOfFameProbabilityLabel</td>
+                        <td class="g-prediction"><div class=@(pred.InductedToHallOfFamePrediction ? "g-prediction-true" : string.Empty)>@pred.InductedToHallOfFamePrediction</div></td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>
 <br />
-<div class="g-predictionTable">
-    <h5>Hall of Fame - On Ballot</h5>
-    <table>
-        <thead>
-            <tr>
-                <th>Year Played</th>
-                <th>Probability</th>
-                <th>Class Label</th>
-            </tr>
-        </thead>
-        @foreach (var pred in this.predictionData.MLBBaseballBatterSeasonPredictions)
-        {
-            <tr class=@(pred.OnHallOfFameBallotPrediction ? "g-prediction-row" : string.Empty)>
-                <td class="g-seasonNumber">@pred.SeasonNumber</td>
-                <td>@pred.OnHallOfFameBallotProbabilityLabel</td>
-                <td class="g-prediction"><div class=@(pred.OnHallOfFameBallotPrediction ? "g-prediction-true" : string.Empty)>@pred.OnHallOfFameBallotPrediction</div></td>
-            </tr>
-        }
-    </table>
-</div>
-<div class="g-predictionTable">
-    <h5>Hall of Fame - Induction</h5>
-    <table>
-        <thead>
-            <tr>
-                <th>Year Played</th>
-                <th>Probability</th>
-                <th>Class Label</th>
-            </tr>
-        </thead>
-        @foreach (var pred in this.predictionData.MLBBaseballBatterSeasonPredictions)
-        {
-            <tr class=@(pred.InductedToHallOfFamePrediction ? "g-prediction-row" : string.Empty)>
-                <td class="g-seasonNumber">@pred.SeasonNumber</td>
-                <td>@pred.InductedToHallOfFameProbabilityLabel</td>
-                <td class="g-prediction"><div class=@(pred.InductedToHallOfFamePrediction ? "g-prediction-true" : string.Empty)>@pred.InductedToHallOfFamePrediction</div></td>
-            </tr>
-        }
-    </table>
-</div>
-
-<div class="g-predictionChart">
-    <h5>Predictions - Historical Seasons</h5>
-    <!-- Create a div where the graph will take place -->
-    <div id="my_dataviz" style="clear: both;">
+<div class="card" style="min-height: 0px;">
+    <div class="containerHeader">
+        <div class="fixedHeader">
+            <button class="showMeButton" @onclick="ChangeChartButtonAppearance">
+                @buttonChart
+            </button>
+        </div>
+        <span class="verticalHeader">Prediction Chart</span>
+    </div>
+    <div class="@cardDetailsChartStyle">
+        <div class="g-predictionChart">
+            <h5>Predictions - Historical Seasons</h5>
+            <!-- Create a div where the graph will take place -->
+            <div id="my_dataviz" style="clear: both;">
+            </div>
+        </div>
     </div>
 </div>
 
+
 @code {
+
+    // Variables
+    private string cardDetailsStyle = "card-details-visible";
+    private string cardDetailsChartStyle = "card-details-visible";
+    private string button = "[-]";
+    private string buttonChart = "[-]";
+
+    private void ChangeButtonAppearance(MouseEventArgs e)
+    {
+        var eventArgs = e;
+
+        cardDetailsStyle = (cardDetailsStyle == "card-details-hidden") ? ("card-details-visible") : ("card-details-hidden");
+        button = (button == "[-]") ? ("[+]") : ("[-]");
+    }
+
+    private void ChangeChartButtonAppearance(MouseEventArgs e)
+    {
+        var eventArgs = e;
+
+        cardDetailsChartStyle = (cardDetailsChartStyle == "card-details-hidden") ? ("card-details-visible") : ("card-details-hidden");
+        buttonChart = (buttonChart == "[-]") ? ("[+]") : ("[-]");
+    }
 
     public List<MLBBaseballBatter> batters = new List<MLBBaseballBatter>(27000);
     public List<MLBBaseballBatter> battersLastYear;
