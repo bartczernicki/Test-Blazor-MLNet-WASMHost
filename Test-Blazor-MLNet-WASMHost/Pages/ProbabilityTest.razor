@@ -112,13 +112,12 @@
     // Variables
     private string cardDetailsStyle = "card-details-visible";
     private string cardDetailsChartStyle = "card-details-visible";
-    private string button = "[-]";
-    private string buttonChart = "[-]";
+    private string button = "[ - ]";
+    private string buttonChart = "[ - ]";
 
     public List<MLBBaseballBatter> batters = new List<MLBBaseballBatter>(27000);
     public List<MLBBaseballBatter> battersLastYear;
     public PredictionData predictionData;
-    private List<PredictionChartData> predictionChartData;
     private MLBBaseballBatter _selectedBatter;
     private string selectedAlgorithm = "LightGbm"; //default
     private string[] predictionTypes = { "InductedToHallOfFame", "OnHallOfFameBallot" };
@@ -128,13 +127,14 @@
         get { return _selectedBatter; }
         set
         {
-            _selectedBatter = value;
-            Console.WriteLine("Selected Batter: " + _selectedBatter.FullPlayerName);
-            this.PerformPrediction();
+            if (value != null)
+            {
+                _selectedBatter = value;
+                Console.WriteLine("Selected Batter: " + _selectedBatter.FullPlayerName);
+                this.PerformPrediction();
+            }
         }
     }
-
-    private string probability = "0";
 
     protected override void OnInitialized()
     {
@@ -173,7 +173,7 @@
         var eventArgs = e;
 
         cardDetailsStyle = (cardDetailsStyle == "card-details-hidden") ? ("card-details-visible") : ("card-details-hidden");
-        button = (button == "[-]") ? ("[+]") : ("[-]");
+        button = (button == "[ - ]") ? ("[ + ]") : ("[ - ]");
     }
 
     private void ChangeChartButtonAppearance(MouseEventArgs e)
@@ -181,7 +181,7 @@
         var eventArgs = e;
 
         cardDetailsChartStyle = (cardDetailsChartStyle == "card-details-hidden") ? ("card-details-visible") : ("card-details-hidden");
-        buttonChart = (buttonChart == "[-]") ? ("[+]") : ("[-]");
+        buttonChart = (buttonChart == "[ - ]") ? ("[ + ]") : ("[ - ]");
     }
 
     private void PerformPrediction()
