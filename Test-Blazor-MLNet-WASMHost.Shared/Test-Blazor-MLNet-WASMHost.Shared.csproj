@@ -10,6 +10,7 @@
     <None Remove="Models\InductedToHallOfFame-AveragedPerceptron.mlnet" />
     <None Remove="Models\InductedToHallOfFame-FastForest.mlnet" />
     <None Remove="Models\InductedToHallOfFame-FastTree.mlnet" />
+    <None Remove="Models\InductedToHallOfFame-FastTree.onnx" />
     <None Remove="Models\InductedToHallOfFame-FieldAwareFactorization.mlnet" />
     <None Remove="Models\InductedToHallOfFame-GeneralizedAdditiveModels.mlnet" />
     <None Remove="Models\InductedToHallOfFame-LightGbm.mlnet" />
@@ -40,6 +41,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Models\InductedToHallOfFame-FastTree.mlnet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Models\InductedToHallOfFame-FastTree.onnx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Models\InductedToHallOfFame-FieldAwareFactorization.mlnet">

@@ -23,6 +23,14 @@ namespace Test_Blazor_MLNet_WASMHost.Shared
             return resource;
         }
 
+        public static Stream GetModelOnnx()
+        {
+            var assembly = typeof(Test_Blazor_MLNet_WASMHost.Shared.Util).Assembly;
+            Stream resource = assembly.GetManifestResourceStream($"Test_Blazor_MLNet_WASMHost.Shared.Models.InductedToHallOfFame-FastTree.onnx");
+
+            return resource;
+        }
+
         public static Stream GetBaseballData()
         {
             var assembly = typeof(Test_Blazor_MLNet_WASMHost.Shared.Util).Assembly;

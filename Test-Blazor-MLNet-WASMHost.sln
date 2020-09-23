@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30509.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test-Blazor-MLNet-WASMHost", "Test-Blazor-MLNet-WASMHost\Test-Blazor-MLNet-WASMHost.csproj", "{1A3AC681-B36C-4B63-9A59-DB9798FAEF59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test-Blazor-MLNet-WASMHost", "Test-Blazor-MLNet-WASMHost\Test-Blazor-MLNet-WASMHost.csproj", "{1A3AC681-B36C-4B63-9A59-DB9798FAEF59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test-Blazor-MLNet-WASMHost.Shared", "Test-Blazor-MLNet-WASMHost.Shared\Test-Blazor-MLNet-WASMHost.Shared.csproj", "{C990EEDA-FC39-4F0E-869E-035735697C34}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test-Blazor-MLNet-WASMHost.Shared", "Test-Blazor-MLNet-WASMHost.Shared\Test-Blazor-MLNet-WASMHost.Shared.csproj", "{C990EEDA-FC39-4F0E-869E-035735697C34}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

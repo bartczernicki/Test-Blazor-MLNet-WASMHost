@@ -1,10 +1,11 @@
 ﻿function createD3SvgObject(data, dataMinMax, selectedAlgorithm) {
 
+    // Clear out the previous SVG chart
+    var svgTest = d3.select("#my_dataviz");
+    svgTest.selectAll("*").remove();
+
     //console.log(data);
     console.log(selectedAlgorithm);
-
-    //https://datacadamia.com/viz/d3/histogram#instantiation
-    //http://bl.ocks.org/nnattawat/8916402
 
     // Convert set of objects to arrays
     const dataArray = Object.entries(data);
@@ -21,8 +22,6 @@
     // DRAW D3 CHART - SVG
 
     // 1) Set up chart canvas
-    var svgTest = d3.select("#my_dataviz");
-    svgTest.selectAll("*").remove();
 
     // set the dimensions and margins of the graph
     var margin = { top: 10, right: 65, bottom: 30, left: 10 },
@@ -133,7 +132,7 @@
     for (i = 0; i != dataArray.length; i++) {
         //console.log(dataArray[i]);
         if (dataArray[i][1].algorithm == selectedAlgorithm) {
-            console.log(dataArray[i]);
+            // console.log(dataArray[i]);
             selectedItems.push(dataArray[i]);
         };
     };
