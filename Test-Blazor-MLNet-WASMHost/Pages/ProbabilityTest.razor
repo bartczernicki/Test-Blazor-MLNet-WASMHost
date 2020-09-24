@@ -19,9 +19,9 @@
 
 <small class="form-text text-muted"><b>Select or Search</b> any MLB Batter to perform prediction:</small>
 <BlazoredTypeahead SearchMethod="@SearchBaseballPlayers"
-        @bind-Value="@SelectedBatter"
-        Debounce="150" MaximumSuggestions="50"
-        EnableDropDown="true" ShowDropDownOnFocus="true">
+                   @bind-Value="@SelectedBatter"
+                   Debounce="150" MaximumSuggestions="50"
+                   EnableDropDown="true" ShowDropDownOnFocus="true">
     <SelectedTemplate>
         <b>@context.FullPlayerName - &nbsp;</b> (Years Played: @context.YearsPlayed, Last Season Played: @context.LastYearPlayed-@(context.LastYearPlayed + 1))
     </SelectedTemplate>
@@ -33,7 +33,7 @@
     </NotFoundTemplate>
 </BlazoredTypeahead>
 
-<br/>
+<br />
 <div class="card" style="min-height: 0px;">
     <div class="containerHeader">
         <div class="fixedHeader">
@@ -100,11 +100,12 @@
         <div class="g-predictionChart">
             <h5>Predictions - Historical Seasons</h5>
             <!-- Create a div where the graph will take place -->
-            <div id="my_dataviz" style="clear: both;">
+            <div id="my_dataviz" class="svg-container">
             </div>
         </div>
     </div>
 </div>
+
 
 
 @code {

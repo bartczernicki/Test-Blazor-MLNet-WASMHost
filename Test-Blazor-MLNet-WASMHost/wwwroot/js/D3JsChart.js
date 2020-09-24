@@ -5,7 +5,7 @@
     svgTest.selectAll("*").remove();
 
     //console.log(data);
-    console.log(selectedAlgorithm);
+    //console.log(selectedAlgorithm);
 
     // Convert set of objects to arrays
     const dataArray = Object.entries(data);
@@ -34,8 +34,11 @@
         // append the svg object to the body of the page
         var svg = d3.select("#my_dataviz")
             .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
+            .attr("preserveAspectRatio", "xMinYMin meet")
+            .attr("viewBox", "0 0 400 400")
+            .classed("svg-content", true)
+            //.attr("width", width + margin.left + margin.right)
+            //.attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")");

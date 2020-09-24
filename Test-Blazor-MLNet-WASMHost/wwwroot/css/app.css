@@ -49,6 +49,23 @@ a, .btn-link {
         top: 0.5rem;
     }
 
+/* SVG Container */
+.svg-container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    vertical-align: top;
+    overflow: hidden;
+}
+
+.svg-content {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
 /* Dropdown List*/
 .dropDown {
     width: 100%;
@@ -251,14 +268,14 @@ td {
 }
 
 .g-predictionChart {
-    width: 330px;
+/*    width: 330px;*/
     margin-left: 10px;
 }
 
 .g-predictionTable {
-    width: 330px;
+    width: 320px;
     float: left;
-    margin-left: 10px;
+/*    margin-left: 10px;*/
 }
 
 .g-seasonNumber {
