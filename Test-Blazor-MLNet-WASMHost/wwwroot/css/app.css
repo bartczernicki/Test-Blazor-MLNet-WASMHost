@@ -139,7 +139,7 @@ a, .btn-link {
     padding: 1px;
     /*color: #232323;*/
     box-shadow: inset 0px 4px 5px rgba(0,0,0,0.1);
-    border-top: 1px soild #000;
+    border-top: 1px solid #000;
     border-radius: 0;
 }
 
@@ -275,7 +275,7 @@ td {
 .g-predictionTable {
     width: 320px;
     float: left;
-/*    margin-left: 10px;*/
+    margin-left: 10px;
 }
 
 .g-seasonNumber {
