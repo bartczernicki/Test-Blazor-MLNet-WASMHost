@@ -1,12 +1,8 @@
 ﻿using Microsoft.ML;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Test_Blazor_MLNet_WASMHost.Shared
 {
@@ -170,38 +166,40 @@ namespace Test_Blazor_MLNet_WASMHost.Shared
                     if (algorithmName == "StackedEnsemble")
                     {
                         // Average out predictions for ensemble
-                        float probabilityInducted = probabilitiesInducted.Select(a => a.Probability).Sum() / 5;
-                        float probabilityOnHallOfFameBallot = probabilitiesOnHallOfFameBallot.Select(a => a.Probability).Sum() / 5;
+                        var probabilityInducted = probabilitiesInducted.Select(a => a.Probability).Sum() / 5;
+                        var probabilityOnHallOfFameBallot = probabilitiesOnHallOfFameBallot.Select(a => a.Probability).Sum() / 5;
 
                         seasonPrediction = new MLBBaseballBatterSeasonPrediction
                         {
                             SeasonNumber = season,
                             FullPlayerName = mLBBaseballBatter.FullPlayerName,
                             InductedToHallOfFamePrediction = (probabilityInducted > 0.5f) ? true : false,
-                            InductedToHallOfFameProbability = Math.Round(probabilityInducted, 5, MidpointRounding.AwayFromZero),
+                            InductedToHallOfFameProbability = probabilityInducted,
                             OnHallOfFameBallotPrediction = (probabilityOnHallOfFameBallot > 0.5f) ? true : false,
-                            OnHallOfFameBallotProbability = Math.Round(probabilityOnHallOfFameBallot, 5, MidpointRounding.AwayFromZero)
+                            OnHallOfFameBallotProbability = probabilityOnHallOfFameBallot
                         };
                     }
                     else
                     {
                     // Average out predictions for ensemble
-                        float probabilityInducted = probabilitiesInducted.Where(a => a.AlgorithmName == algorithmName).FirstOrDefault()?.Probability ?? 0f;
-                        float probabilityOnHallOfFameBallot = probabilitiesOnHallOfFameBallot.Where(a => a.AlgorithmName == algorithmName).FirstOrDefault()?.Probability ?? 0f;
+                        var probabilityInducted = probabilitiesInducted.Where(a => a.AlgorithmName == algorithmName).FirstOrDefault()?.Probability ?? 0f;
+                        var probabilityOnHallOfFameBallot = probabilitiesOnHallOfFameBallot.Where(a => a.AlgorithmName == algorithmName).FirstOrDefault()?.Probability ?? 0f;
 
                         seasonPrediction = new MLBBaseballBatterSeasonPrediction
                         {
                             SeasonNumber = season,
                             FullPlayerName = mLBBaseballBatter.FullPlayerName,
                             InductedToHallOfFamePrediction = probabilitiesInducted.Where(a => a.AlgorithmName == algorithmName).FirstOrDefault().Prediction,
-                            InductedToHallOfFameProbability = Math.Round(probabilityInducted, 5, MidpointRounding.AwayFromZero),
+                            InductedToHallOfFameProbability = probabilityInducted,
                             OnHallOfFameBallotPrediction = probabilitiesOnHallOfFameBallot.Where(a => a.AlgorithmName == algorithmName).FirstOrDefault().Prediction,
-                            OnHallOfFameBallotProbability = Math.Round(probabilityOnHallOfFameBallot, 5, MidpointRounding.AwayFromZero)
+                            OnHallOfFameBallotProbability = probabilityOnHallOfFameBallot
                         };
                     }
 
-                    seasonPrediction.InductedToHallOfFameProbabilityLabel = (seasonPrediction.InductedToHallOfFameProbability == 0f) ? "N/A" : seasonPrediction.InductedToHallOfFameProbability.ToString();
-                    seasonPrediction.OnHallOfFameBallotProbabilityLabel = (seasonPrediction.OnHallOfFameBallotProbability == 0f) ? "N/A" : seasonPrediction.OnHallOfFameBallotProbability.ToString();
+                    seasonPrediction.InductedToHallOfFameProbabilityLabel = (seasonPrediction.InductedToHallOfFameProbability == 0f) ? "N/A" :
+                        Math.Round(seasonPrediction.InductedToHallOfFameProbability, 6, MidpointRounding.AwayFromZero).ToString("0.000");
+                    seasonPrediction.OnHallOfFameBallotProbabilityLabel = (seasonPrediction.OnHallOfFameBallotProbability == 0f) ? "N/A" :
+                        Math.Round(seasonPrediction.OnHallOfFameBallotProbability, 6, MidpointRounding.AwayFromZero).ToString("0.000");
                     mlbBaseballBatterSeasonPredictions.Add(seasonPrediction);
 
                     // Add StackedEnsemble always to the ChartData
