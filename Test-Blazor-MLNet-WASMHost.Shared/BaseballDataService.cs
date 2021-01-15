@@ -53,10 +53,9 @@ namespace Test_Blazor_MLNet_WASMHost.Shared
 
             // Load MLB baseball batters from local CSV file
 
-
             var assembly = typeof(Test_Blazor_MLNet_WASMHost.Shared.Util).Assembly;
 
-            var lines = ReadLines(() => Util.GetBaseballData(), Encoding.UTF8);
+            var lines = ReadLines(() => Util.GetBaseballDataStream(), Encoding.UTF8);
 
             var batters = lines
                         .Skip(1)

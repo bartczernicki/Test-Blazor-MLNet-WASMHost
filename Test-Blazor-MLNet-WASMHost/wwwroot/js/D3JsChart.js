@@ -5,7 +5,7 @@
     svgTest.selectAll("*").remove();
 
     //console.log(data);
-    //console.log(selectedAlgorithm);
+    console.log("D3JsChart.js - " + selectedAlgorithm);
 
     // Convert set of objects to arrays
     const dataArray = Object.entries(data);
@@ -17,6 +17,7 @@
 
     // Set max seasons played (max range)
     var maxSeasonPlayed = d3.max(dataArray, d => d[1].seasonPlayed);
+
     // Get max probability in array, if 0 then it is an algorithm that doesn't return probabilities
     var maxProbability = d3.max(dataMinMaxArray, d => d[1].max);
 
@@ -34,11 +35,8 @@
         // append the svg object to the body of the page
         var svg = d3.select("#my_dataviz")
             .append("svg")
-            .attr("preserveAspectRatio", "xMinYMin meet")
-            .attr("viewBox", "0 0 400 400")
-            .classed("svg-content", true)
-            //.attr("width", width + margin.left + margin.right)
-            //.attr("height", height + margin.top + margin.bottom)
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")");

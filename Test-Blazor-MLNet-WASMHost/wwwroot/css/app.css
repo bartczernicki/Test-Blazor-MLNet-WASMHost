@@ -49,23 +49,6 @@ a, .btn-link {
         top: 0.5rem;
     }
 
-/* SVG Container */
-.svg-container {
-    display: inline-block;
-    position: relative;
-    width: 100%;
-    padding-bottom: 100%;
-    vertical-align: top;
-    overflow: hidden;
-}
-
-.svg-content {
-    display: inline-block;
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
 /* Dropdown List*/
 .dropDown {
     width: 100%;
@@ -139,7 +122,7 @@ a, .btn-link {
     padding: 1px;
     /*color: #232323;*/
     box-shadow: inset 0px 4px 5px rgba(0,0,0,0.1);
-    border-top: 1px solid #000;
+    border-top: 1px soild #000;
     border-radius: 0;
 }
 
@@ -194,10 +177,10 @@ showMeButton:focus {
     /*    width: 120px;*/
 }
 
-.fixedHeader h5 {
-    display: table-cell;
-    vertical-align: middle
-}
+    .fixedHeader h5 {
+        display: table-cell;
+        vertical-align: middle
+    }
 
 .flex-itemHeader {
     flex-grow: 1;
@@ -222,8 +205,8 @@ showMeButton:focus {
 .verticalHeader {
     display: table-cell;
     vertical-align: middle;
-    font-size:smaller;
-/*    font-weight: 400;*/
+    font-size: smaller;
+    /*    font-weight: 400;*/
     text-transform: uppercase;
     padding-top: 2px;
 }
@@ -268,12 +251,12 @@ td {
 }
 
 .g-predictionChart {
-/*    width: 330px;*/
+    width: 330px;
     margin-left: 10px;
 }
 
 .g-predictionTable {
-    width: 320px;
+    width: 330px;
     float: left;
     margin-left: 10px;
 }

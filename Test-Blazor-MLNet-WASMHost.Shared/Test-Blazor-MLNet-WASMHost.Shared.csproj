@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Data\MLBBaseballBattersHistorical.csv" />
+    <None Remove="LuceneIndex\LuceneIndex.zip" />
     <None Remove="Models\InductedToHallOfFame-AveragedPerceptron.mlnet" />
     <None Remove="Models\InductedToHallOfFame-FastForest.mlnet" />
     <None Remove="Models\InductedToHallOfFame-FastTree.mlnet" />
@@ -31,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Data\MLBBaseballBattersHistorical.csv">
+    <EmbeddedResource Include="LuceneIndex\LuceneIndex.zip">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Models\InductedToHallOfFame-AveragedPerceptron.mlnet">
@@ -100,6 +100,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Lucene.Net" Version="4.8.0-beta00013" />
+    <PackageReference Include="Lucene.Net.QueryParser" Version="4.8.0-beta00013" />
     <PackageReference Include="Microsoft.ML" Version="1.5.4" />
     <PackageReference Include="Microsoft.ML.FastTree" Version="1.5.4" />
     <PackageReference Include="Microsoft.ML.LightGbm" Version="1.5.4" />

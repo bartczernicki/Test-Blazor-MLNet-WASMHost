@@ -5,7 +5,7 @@
 
 <strong class="form-text">Local prediction inference in Blazor and ML.NET</strong>
 <small class="form-text text-muted"><b>Select </b>the algorithm used in the ML.NET model for prediction:</small>
-<small class="form-text text-muted"><b>Note: </b>Models that do not return probability values (only labels) will show value as N/A</small>
+<small class="form-text text-muted"><b>Note: </b>Models that do not return probability values (only labels) will show values as N/A</small>
 <select id="algorithmName" @onchange="OnSelectedAlgorithm" class="dropDown">
     <option value="AveragedPerceptron">AveragedPerceptron</option>
     <option value="FastForest">FastForest</option>
@@ -19,7 +19,7 @@
 </select>
 
 <small class="form-text text-muted"><b>Select or Search</b> any MLB Batter to perform prediction:</small>
-<BlazoredTypeahead SearchMethod="@SearchBaseballPlayers"
+<BlazoredTypeahead SearchMethod="@SearchBaseballPlayersInLuceneAsync"
                    @bind-Value="@SelectedBatter"
                    Debounce="150" MaximumSuggestions="50"
                    EnableDropDown="true" ShowDropDownOnFocus="true">
@@ -101,7 +101,7 @@
         <div class="g-predictionChart">
             <h5>Predictions - Historical Seasons</h5>
             <!-- Create a div where the graph will take place -->
-            <div id="my_dataviz" class="svg-container">
+            <div id="my_dataviz" style="clear: both;">
             </div>
         </div>
     </div>
@@ -123,6 +123,16 @@
     private string selectedAlgorithm = "LightGbm"; //default
     private string[] predictionTypes = { "InductedToHallOfFame", "OnHallOfFameBallot" };
 
+    // Lucene
+    private DirectoryReader indexReader;
+    private IndexSearcher searcher;
+
+    StandardAnalyzer analyzer = new StandardAnalyzer(Lucene.Net.Util.LuceneVersion.LUCENE_48);
+
+    NumericRangeQuery<int> queryRangedMaxRecords = NumericRangeQuery.NewInt32Range("IsBatterMaxYearsRecord", 1, 1, true, true);
+    NumericRangeQuery<float> queryRangedLongerYearsRecords = NumericRangeQuery.NewSingleRange("YearsPlayed", 21f, 30f, true, true);
+
+
     public MLBBaseballBatter SelectedBatter
     {
         get { return _selectedBatter; }
@@ -131,7 +141,7 @@
             if (value != null)
             {
                 _selectedBatter = value;
-                Console.WriteLine("Selected Batter: " + _selectedBatter.FullPlayerName);
+                Console.WriteLine("SelectedBatter - " + _selectedBatter.FullPlayerName);
                 this.PerformPrediction();
             }
         }
@@ -139,16 +149,33 @@
 
     protected override void OnInitialized()
     {
+        // Unpack Lucene Index (Zip -> Current Directory)
+        Util.LoadLuceneIndexIntoDirectory();
+
+        var zipDirectory = FSDirectory.Open(Environment.CurrentDirectory);
+        Console.WriteLine("OnInitialized - Open Index Dir");
+
+        this.indexReader = DirectoryReader.Open(zipDirectory);
+        this.searcher = new IndexSearcher(indexReader);
+        Console.WriteLine("OnInitialized - Current Count of Index Docs: " + indexReader.NumDocs);
+
         // Build baseball batters list
 
-        batters = BaseballDataSampleService.Instance.SampleBaseBallData;
+        //batters = BaseballDataSampleService.Instance.SampleBaseBallData;
 
-        this.battersLastYear = batters
-          .OrderByDescending(a => a.YearsPlayed)
-          .GroupBy(a => a.ID)
-          .Select(g => g.First()).ToList();
+        //this.battersLastYear = batters
+        //  .OrderByDescending(a => a.YearsPlayed)
+        //  .GroupBy(a => a.ID)
+        //  .Select(g => g.First()).ToList();
 
-        this.SelectedBatter = battersLastYear.Where(a => a.FullPlayerName == MLBBaseballBatter.GetDefaultBatter()).FirstOrDefault();
+        // Mike Trout (default)
+        this.SelectedBatter = new MLBBaseballBatter
+        {
+            ID = "troutmi01",
+            FullPlayerName = "Mike Trout",
+            YearsPlayed = 9,
+            LastYearPlayed = 2019
+        };
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -159,14 +186,73 @@
     void OnSelectedAlgorithm(ChangeEventArgs e)
     {
         this.selectedAlgorithm = e.Value.ToString();
-        Console.WriteLine("Selected Algorithm: " + selectedAlgorithm);
+        Console.WriteLine("OnAfterRenderAsync - Selected Algorithm: " + selectedAlgorithm);
 
         this.PerformPrediction();
     }
 
-    private async Task<IEnumerable<MLBBaseballBatter>> SearchBaseballPlayers(string searchText)
+    private async Task<IEnumerable<MLBBaseballBatter>> SearchBaseballPlayersInLuceneAsync(string searchText)
     {
-        return await Task.FromResult(battersLastYear.Where(x => x.FullPlayerName.ToLower().Contains(searchText.ToLower())).ToList());
+        var baseBallPlayers = new List<MLBBaseballBatter>(50);
+
+        BooleanQuery andQuery = new BooleanQuery();
+
+        if (String.IsNullOrEmpty(searchText))
+        {
+            andQuery.Add(queryRangedMaxRecords, Occur.MUST);
+            andQuery.Add(queryRangedLongerYearsRecords, Occur.MUST);
+        }
+        else
+        {
+            QueryParser fullPlayerNameParser = new QueryParser(Lucene.Net.Util.LuceneVersion.LUCENE_48, "FullPlayerName", analyzer);
+            var query = fullPlayerNameParser.Parse(searchText.Trim() + "*");
+
+            andQuery.Add(queryRangedMaxRecords, Occur.MUST);
+            andQuery.Add(query, Occur.MUST);
+        }
+
+        var searchResults = searcher.Search(andQuery, 50);
+        var hits = searchResults.ScoreDocs;
+
+        foreach (var hit in hits)
+        {
+            var foundDoc = searcher.Doc(hit.Doc);
+            var player = Util.GetBaseballBatterFromLuceneDocument(foundDoc);
+
+            baseBallPlayers.Add(player);
+        }
+
+        // Order by years played if search term is less than 5 characters
+        // This way players with common names and higher years played show up on top of search results
+        if (searchText.Length < 5)
+        {
+            baseBallPlayers = baseBallPlayers.OrderByDescending(a => a.YearsPlayed).Select(a => a).ToList();
+        }
+
+        return await Task.FromResult(baseBallPlayers);
+    }
+
+    private List<MLBBaseballBatter> GetBaseballPlayerById(string id)
+    {
+        var baseBallPlayers = new List<MLBBaseballBatter>();
+
+        var termBaseBallPlayer = new Term("Id", id);
+        var termQuery = new TermQuery(termBaseBallPlayer);
+
+        // No player has more than 25 years played
+        var searchResultsTermQuery = searcher.Search(termQuery, 30); /* top 30 */;
+        var hitsTermQuery = searchResultsTermQuery.ScoreDocs;
+
+        foreach (var hit in hitsTermQuery)
+        {
+            var foundDoc = searcher.Doc(hit.Doc);
+
+            var player = Util.GetBaseballBatterFromLuceneDocument(foundDoc);
+
+            baseBallPlayers.Add(player);
+        }
+
+        return baseBallPlayers;
     }
 
     private void ChangeButtonAppearance(MouseEventArgs e)
@@ -187,7 +273,11 @@
 
     private void PerformPrediction()
     {
-        var selectedBatterSeasons = batters.Where(b => b.ID == this.SelectedBatter.ID).ToList();
+        // Old method
+        // var selectedBatterSeasons = batters.Where(b => b.ID == this.SelectedBatter.ID).ToList();
+
+        var selectedBatterSeasons = this.GetBaseballPlayerById(this.SelectedBatter.ID);
+
         this.predictionData = Util.GetMLBBaseballBatterSeasonPredictions(selectedAlgorithm, SelectedBatter, selectedBatterSeasons);
     }
 
@@ -199,5 +289,15 @@
         }
 
         await JSRuntime.InvokeVoidAsync("createD3SvgObject", this.predictionData.ChartData, this.predictionData.ChartDataMinMax, selectedAlgorithm);
+    }
+
+    /// <summary>
+    ///  Depracated in favor of much faster Lucene Index Search
+    /// </summary>
+    /// <param name="searchText"></param>
+    /// <returns></returns>
+    private async Task<IEnumerable<MLBBaseballBatter>> SearchBaseballPlayers(string searchText)
+    {
+        return await Task.FromResult(battersLastYear.Where(x => x.FullPlayerName.ToLower().Contains(searchText.ToLower())).ToList());
     }
 }
