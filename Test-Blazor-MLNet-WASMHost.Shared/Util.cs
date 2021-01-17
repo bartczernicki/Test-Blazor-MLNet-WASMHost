@@ -281,7 +281,7 @@ namespace Test_Blazor_MLNet_WASMHost.Shared
                 MajorLeaguePlayerOfTheYearAwards = (float)document.GetField("MajorLeaguePlayerOfTheYearAwards").GetSingleValue(),
                 TB = (float)document.GetField("TB").GetSingleValue(),
                 TotalPlayerAwards = (float)document.GetField("TotalPlayerAwards").GetSingleValue(),
-                LastYearPlayed = (float)document.GetField("LastYearPlayed").GetSingleValue(),
+                LastYearPlayed = (float)document.GetField("LastYearPlayed").GetSingleValue()
             };
 
             return mlbBaseballBatter;

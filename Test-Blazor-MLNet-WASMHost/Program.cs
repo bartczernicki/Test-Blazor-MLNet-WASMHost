@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Test_Blazor_MLNet_WASMHost.Shared;
 
 namespace Test_Blazor_MLNet_WASMHost
 {
@@ -15,8 +16,8 @@ namespace Test_Blazor_MLNet_WASMHost
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-            // Add Baseball data service (from CSV resource)
-            //builder.Services.AddSingleton<BaseballDataSampleService>();
+            // Add Lucene Index service (load Lucene Index from zip file and expose Directory Reader)
+            builder.Services.AddSingleton<LuceneIndexService>(LuceneIndexService.Instance);
 
             await builder.Build().RunAsync();
         }

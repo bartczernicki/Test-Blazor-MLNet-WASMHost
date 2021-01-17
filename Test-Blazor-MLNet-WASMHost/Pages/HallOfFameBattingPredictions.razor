@@ -1,5 +1,6 @@
 ﻿@page "/HallOfFameBattingPredictions"
 @inject IJSRuntime JSRuntime
+@inject LuceneIndexService luceneIndexService;
 
 <link href="_content/Blazored.Typeahead/blazored-typeahead.css" rel="stylesheet" />
 
@@ -149,14 +150,9 @@
 
     protected override void OnInitialized()
     {
-        // Unpack Lucene Index (Zip -> Current Directory)
-        Util.LoadLuceneIndexIntoDirectory();
-
-        var zipDirectory = FSDirectory.Open(Environment.CurrentDirectory);
-        Console.WriteLine("OnInitialized - Open Index Dir");
-
-        this.indexReader = DirectoryReader.Open(zipDirectory);
+        this.indexReader = luceneIndexService.IndexReader;
         this.searcher = new IndexSearcher(indexReader);
+
         Console.WriteLine("OnInitialized - Current Count of Index Docs: " + indexReader.NumDocs);
 
         // Build baseball batters list
