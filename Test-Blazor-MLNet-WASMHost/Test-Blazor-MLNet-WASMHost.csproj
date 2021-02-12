@@ -8,8 +8,8 @@
     <PackageReference Include="Blazored.Typeahead" Version="4.5.1" />
     <PackageReference Include="Lucene.Net" Version="4.8.0-beta00013" />
     <PackageReference Include="Lucene.Net.QueryParser" Version="4.8.0-beta00013" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.2" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.3" PrivateAssets="all" />
     <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
   </ItemGroup>
 
